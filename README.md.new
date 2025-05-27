@@ -1,0 +1,126 @@
+# Azure Traffic Manager Profile - Terraform Module
+
+This Terraform module deploys an Azure Traffic Manager Profile in Azure and optionally provisions traffic manager endpoints. The module provides a convenient way to deploy a Traffic Manager Profile with most commonly required configurations.
+
+## Features
+
+- Deploy Azure Traffic Manager Profile with different routing methods
+- Configure monitor settings for endpoint health checks
+- Add multiple endpoints of different types (Azure, External, Nested)
+- Support for diagnostic settings
+- Compatible with Azure Verified Modules (AVM) patterns
+
+## Example Usage
+
+```hcl
+module "traffic_manager" {
+  source              = "Azure/avm-res-network-trafficmanagerprofile/azurerm"
+  version             = "~> 0.1.0"
+  
+  name                = "mytmprofile"
+  resource_group_name = "my-resource-group"
+  
+  traffic_routing_method = "Priority"
+  profile_status         = "Enabled"
+  ttl                    = 60
+  
+  monitor_config = {
+    protocol                     = "HTTP"
+    port                         = 80
+    path                         = "/"
+    interval_in_seconds          = 30
+    timeout_in_seconds           = 10
+    tolerated_number_of_failures = 3
+    expected_status_code_ranges  = ["200-299"]
+  }
+  
+  endpoints = [
+    {
+      name               = "primary"
+      endpoint_type      = "Azure"
+      target_resource_id = azurerm_windows_web_app.example1.id
+      priority           = 1
+      endpoint_status    = "Enabled"
+    },
+    {
+      name               = "secondary"
+      endpoint_type      = "Azure"
+      target_resource_id = azurerm_windows_web_app.example2.id
+      priority           = 2
+      endpoint_status    = "Enabled"
+    }
+  ]
+  
+  tags = {
+    environment = "production"
+    owner       = "terraform"
+  }
+}
+```
+
+## Requirements
+
+| Name | Version |
+|------|---------|
+| terraform | ~> 1.5 |
+| azurerm | ~> 4.29.0 |
+| modtm | ~> 0.3 |
+| random | ~> 3.5 |
+
+## Providers
+
+| Name | Version |
+|------|---------|
+| azurerm | ~> 4.29.0 |
+| modtm | ~> 0.3 |
+| random | ~> 3.5 |
+
+## Resources
+
+| Name | Type |
+|------|------|
+| [azurerm_traffic_manager_profile.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/traffic_manager_profile) | resource |
+| [azurerm_traffic_manager_endpoint.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/traffic_manager_endpoint) | resource |
+| [azurerm_monitor_diagnostic_setting.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/monitor_diagnostic_setting) | resource |
+| [azurerm_resource_group.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/resource_group) | data source |
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| name | The name of the Traffic Manager profile. | string | n/a | yes |
+| resource_group_name | The resource group where the resources will be deployed. | string | n/a | yes |
+| location | Azure region where the resource should be deployed. | string | n/a | yes |
+| traffic_routing_method | Specifies the traffic routing method of the Traffic Manager profile. Possible values are: Geographic, MultiValue, Performance, Priority, Subnet, Weighted. | string | "Performance" | no |
+| profile_status | The status of the Traffic Manager profile. Possible values are: Enabled and Disabled. | string | "Enabled" | no |
+| ttl | The DNS Time-To-Live (TTL), in seconds. Possible values include 30 to 999999. | number | 30 | no |
+| monitor_config | The endpoint monitoring configuration of the Traffic Manager profile. | object | See variables.tf | no |
+| max_return | The amount of endpoints to return for DNS queries to this Profile. Only valid for MultiValue routing method. | number | null | no |
+| endpoints | List of Traffic Manager endpoints. | list(object) | [] | no |
+| tags | Tags to be applied to resources. | map(string) | {} | no |
+| diagnostic_settings | A map of diagnostic settings to create. | map(object) | {} | no |
+| enable_telemetry | Enable telemetry via a Globally Unique Identifier (GUID). | bool | true | no |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| id | The ID of the Traffic Manager profile. |
+| name | The name of the Traffic Manager profile. |
+| resource_group_name | The name of the resource group in which the Traffic Manager profile is created. |
+| fqdn | The fully qualified domain name of the Traffic Manager profile. |
+| traffic_routing_method | The traffic routing method of the Traffic Manager profile. |
+| profile_status | The status of the Traffic Manager profile. |
+| endpoints | A map of Traffic Manager endpoints. |
+
+## Contributing
+
+This project welcomes contributions and suggestions. Please review the [contribution guide](CONTRIBUTING.md) for more information.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Data Collection
+
+The software may collect information about you and your use of the software and send it to Microsoft. Microsoft may use this information to provide services and improve our products and services. You may turn off the telemetry as described in the repository. There are also some features in the software that may enable you and Microsoft to collect data from users of your applications. If you use these features, you must comply with applicable law, including providing appropriate notices to users of your applications together with a copy of Microsoft's privacy statement. Our privacy statement is located at <https://go.microsoft.com/fwlink/?LinkID=824704>. You can learn more about data collection and use in the help documentation and our privacy statement. Your use of the software operates as your consent to these practices.

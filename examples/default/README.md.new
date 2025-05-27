@@ -1,84 +1,29 @@
+# Default example
+
+This deploys the Traffic Manager Profile module with two Azure web app endpoints in a priority-based routing configuration.
+
+```hcl
 terraform {
   required_version = "~> 1.5"
-}
-
-# Creating a sample web app for use as an endpoint
-resource "azurerm_service_plan" "example" {
-  name                = "${module.naming.app_service_plan.name_unique}-example"
-  location            = azurerm_resource_group.this.location
-  resource_group_name = azurerm_resource_group.this.name
-  os_type             = "Windows"
-  sku_name            = "S1"
-}
-
-resource "azurerm_windows_web_app" "example1" {
-  name                = "${module.naming.app_service.name_unique}-example1"
-  location            = azurerm_resource_group.this.location
-  resource_group_name = azurerm_resource_group.this.name
-  service_plan_id     = azurerm_service_plan.example.id
-
-  site_config {}
-}
-
-resource "azurerm_windows_web_app" "example2" {
-  name                = "${module.naming.app_service.name_unique}-example2"
-  location            = azurerm_resource_group.this.location
-  resource_group_name = azurerm_resource_group.this.name
-  service_plan_id     = azurerm_service_plan.example.id
-
-  site_config {}
-}
-
-# This is the module call
-module "traffic_manager" {
-  source              = "../../"
-  name                = module.naming.traffic_manager_profile.name_unique
-  resource_group_name = azurerm_resource_group.this.name
-  location            = azurerm_resource_group.this.location
-
-  traffic_routing_method = "Priority"
-  profile_status         = "Enabled"
-  ttl                    = 60
-
-  monitor_config = {
-    protocol                     = "HTTP"
-    port                         = 80
-    path                         = "/"
-    interval_in_seconds          = 30
-    timeout_in_seconds           = 10
-    tolerated_number_of_failures = 3
-    expected_status_code_ranges  = ["200-299"]
-  }
-
-  endpoints = [
-    {
-      name               = "primary"
-      endpoint_type      = "Azure"
-      target_resource_id = azurerm_windows_web_app.example1.id
-      priority           = 1
-      endpoint_status    = "Enabled"
-    },
-    {
-      name               = "secondary"
-      endpoint_type      = "Azure"
-      target_resource_id = azurerm_windows_web_app.example2.id
-      priority           = 2
-      endpoint_status    = "Enabled"
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~> 4.29.0"
     }
-  ]
-
-  tags = {
-    environment = "example"
-    owner       = "terraform"
+    modtm = {
+      source  = "azure/modtm"
+      version = "~> 0.3"
+    }
+    random = {
+      source  = "hashicorp/random"
+      version = "~> 3.5"
+    }
   }
-
-  enable_telemetry = var.enable_telemetry
 }
 
 provider "azurerm" {
   features {}
 }
-
 
 ## Section to provide a random Azure region for the resource group
 # This allows us to randomize the region for the resource group.
@@ -139,11 +84,11 @@ module "traffic_manager" {
   name                = module.naming.traffic_manager_profile.name_unique
   resource_group_name = azurerm_resource_group.this.name
   location            = azurerm_resource_group.this.location
-
+  
   traffic_routing_method = "Priority"
   profile_status         = "Enabled"
   ttl                    = 60
-
+  
   monitor_config = {
     protocol                     = "HTTP"
     port                         = 80
@@ -153,7 +98,7 @@ module "traffic_manager" {
     tolerated_number_of_failures = 3
     expected_status_code_ranges  = ["200-299"]
   }
-
+  
   endpoints = [
     {
       name               = "primary"
@@ -170,7 +115,7 @@ module "traffic_manager" {
       endpoint_status    = "Enabled"
     }
   ]
-
+  
   tags = {
     environment = "example"
     owner       = "terraform"
@@ -178,3 +123,56 @@ module "traffic_manager" {
 
   enable_telemetry = var.enable_telemetry
 }
+```
+
+## Requirements
+
+The following requirements are needed by this module:
+
+- terraform (~> 1.5)
+- azurerm (~> 4.29.0)
+- modtm (~> 0.3)
+- random (~> 3.5)
+
+## Providers
+
+The following providers are used by this module:
+
+- azurerm
+- random
+
+## Resources
+
+The following resources are used by this module:
+
+- azurerm_resource_group.this
+- azurerm_service_plan.example
+- azurerm_windows_web_app.example1
+- azurerm_windows_web_app.example2
+- random_integer.region_index
+
+## Required Inputs
+
+No required inputs.
+
+## Optional Inputs
+
+The following input variables are optional (have default values):
+
+### enable_telemetry
+
+Description: This variable controls whether or not telemetry is enabled for the module.
+For more information see <https://aka.ms/avm/telemetryinfo>.
+If it is set to false, then no telemetry will be collected.
+
+Type: `bool`
+
+Default: `true`
+
+## Outputs
+
+No outputs.
+
+## Data Collection
+
+The software may collect information about you and your use of the software and send it to Microsoft. Microsoft may use this information to provide services and improve our products and services. You may turn off the telemetry as described in the repository. There are also some features in the software that may enable you and Microsoft to collect data from users of your applications. If you use these features, you must comply with applicable law, including providing appropriate notices to users of your applications together with a copy of Microsoft's privacy statement. Our privacy statement is located at <https://go.microsoft.com/fwlink/?LinkID=824704>. You can learn more about data collection and use in the help documentation and our privacy statement. Your use of the software operates as your consent to these practices.

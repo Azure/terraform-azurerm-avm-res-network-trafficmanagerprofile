@@ -1,3 +1,136 @@
+# }
+
+# variable "lock" {
+#   type = object({
+#     kind = string
+#     name = optional(string, null)
+#   })
+#   default     = null
+#   description = <<DESCRIPTION
+# Controls the Resource Lock configuration for this resource. The following properties can be specified:
+
+# - `kind` - (Required) The type of lock. Possible values are `\"CanNotDelete\"` and `\"ReadOnly\"`.
+# - `name` - (Optional) The name of the lock. If not specified, a name will be generated based on the `kind` value. Changing this forces the creation of a new resource.
+# DESCRIPTION
+
+#   validation {
+#     condition     = var.lock != null ? contains(["CanNotDelete", "ReadOnly"], var.lock.kind) : true
+#     error_message = "The lock level must be one of: 'None', 'CanNotDelete', or 'ReadOnly'."
+#   }
+# }
+
+# # tflint-ignore: terraform_unused_declarations
+# variable "managed_identities" {
+#   type = object({
+#     system_assigned            = optional(bool, false)
+#     user_assigned_resource_ids = optional(set(string), [])
+#   })
+#   default     = {}
+#   description = <<DESCRIPTION
+# Controls the Managed Identity configuration on this resource. The following properties can be specified:
+
+# - `system_assigned` - (Optional) Specifies if the System Assigned Managed Identity should be enabled.
+# - `user_assigned_resource_ids` - (Optional) Specifies a list of User Assigned Managed Identity resource IDs to be assigned to this resource.
+# DESCRIPTION
+#   nullable    = false
+# }
+
+# variable "private_endpoints" {
+#   type = map(object({
+#     name = optional(string, null)
+#     role_assignments = optional(map(object({
+#       role_definition_id_or_name             = string
+#       principal_id                           = string
+#       description                            = optional(string, null)
+#       skip_service_principal_aad_check       = optional(bool, false)
+#       condition                              = optional(string, null)
+#       condition_version                      = optional(string, null)
+#       delegated_managed_identity_resource_id = optional(string, null)
+#     })), {})
+#     lock = optional(object({
+#       kind = string
+#       name = optional(string, null)
+#     }), null)
+#     tags                                    = optional(map(string), null)
+#     subnet_resource_id                      = string
+#     private_dns_zone_group_name             = optional(string, "default")
+#     private_dns_zone_resource_ids           = optional(set(string), [])
+#     application_security_group_associations = optional(map(string), {})
+#     private_service_connection_name         = optional(string, null)
+#     network_interface_name                  = optional(string, null)
+#     location                                = optional(string, null)
+#     resource_group_name                     = optional(string, null)
+#     ip_configurations = optional(map(object({
+#       name               = string
+#       private_ip_address = string
+#     })), {})
+#   }))
+#   default     = {}
+#   description = <<DESCRIPTION
+# A map of private endpoints to create on this resource. The map key is deliberately arbitrary to avoid issues where map keys maybe unknown at plan time.
+
+# - `name` - (Optional) The name of the private endpoint. One will be generated if not set.
+# - `role_assignments` - (Optional) A map of role assignments to create on the private endpoint. The map key is deliberately arbitrary to avoid issues where map keys maybe unknown at plan time. See `var.role_assignments` for more information.
+# - `lock` - (Optional) The lock level to apply to the private endpoint. Default is `None`. Possible values are `None`, `CanNotDelete`, and `ReadOnly`.
+# - `tags` - (Optional) A mapping of tags to assign to the private endpoint.
+# - `subnet_resource_id` - The resource ID of the subnet to deploy the private endpoint in.
+# - `private_dns_zone_group_name` - (Optional) The name of the private DNS zone group. One will be generated if not set.
+# - `private_dns_zone_resource_ids` - (Optional) A set of resource IDs of private DNS zones to associate with the private endpoint. If not set, no zone groups will be created and the private endpoint will not be associated with any private DNS zones. DNS records must be managed external to this module.
+# - `application_security_group_resource_ids` - (Optional) A map of resource IDs of application security groups to associate with the private endpoint. The map key is deliberately arbitrary to avoid issues where map keys maybe unknown at plan time.
+# - `private_service_connection_name` - (Optional) The name of the private service connection. One will be generated if not set.
+# - `network_interface_name` - (Optional) The name of the network interface. One will be generated if not set.
+# - `location` - (Optional) The Azure location where the resources will be deployed. Defaults to the location of the resource group.
+# - `resource_group_name` - (Optional) The resource group where the resources will be deployed. Defaults to the resource group of this resource.
+# - `ip_configurations` - (Optional) A map of IP configurations to create on the private endpoint. If not specified the platform will create one. The map key is deliberately arbitrary to avoid issues where map keys maybe unknown at plan time.
+#   - `name` - The name of the IP configuration.
+#   - `private_ip_address` - The private IP address of the IP configuration.
+# DESCRIPTION
+#   nullable    = false
+# }
+
+# # This variable is used to determine if the private_dns_zone_group block should be included,
+# # or if it is to be managed externally, e.g. using Azure Policy.
+# # https://github.com/Azure/terraform-azurerm-avm-res-keyvault-vault/issues/32
+# # Alternatively you can use AzAPI, which does not have this issue.
+# variable "private_endpoints_manage_dns_zone_group" {
+#   type        = bool
+#   default     = true
+#   description = "Whether to manage private DNS zone groups with this module. If set to false, you must manage private DNS zone groups externally, e.g. using Azure Policy."
+#   nullable    = false
+# }
+
+# variable "role_assignments" {
+#   type = map(object({
+#     role_definition_id_or_name             = string
+#     principal_id                           = string
+#     description                            = optional(string, null)
+#     skip_service_principal_aad_check       = optional(bool, false)
+#     condition                              = optional(string, null)
+#     condition_version                      = optional(string, null)
+#     delegated_managed_identity_resource_id = optional(string, null)
+#   }))
+#   default     = {}
+#   description = <<DESCRIPTION
+# A map of role assignments to create on this resource. The map key is deliberately arbitrary to avoid issues where map keys maybe unknown at plan time.
+
+# - `role_definition_id_or_name` - The ID or name of the role definition to assign to the principal.
+# - `principal_id` - The ID of the principal to assign the role to.
+# - `description` - The description of the role assignment.
+# - `skip_service_principal_aad_check` - If set to true, skips the Azure Active Directory check for the service principal in the tenant. Defaults to false.
+# - `condition` - The condition which will be used to scope the role assignment.
+# - `condition_version` - The version of the condition syntax. Valid values are '2.0'.
+
+# > Note: only set `skip_service_principal_aad_check` to true if you are assigning a role to a service principal.
+# DESCRIPTION
+#   nullable    = false
+# }
+
+# # tflint-ignore: terraform_unused_declarations
+# variable "tags" {
+#   type        = map(string)
+#   default     = null
+#   description = "(Optional) Tags of the resource."
+# }
 variable "location" {
   type        = string
   description = "Azure region where the resource should be deployed."
@@ -6,13 +139,11 @@ variable "location" {
 
 variable "name" {
   type        = string
-  description = "The name of the this resource."
+  description = "The name of the Traffic Manager profile."
 
   validation {
-    condition     = can(regex("TODO", var.name))
-    error_message = "The name must be TODO." # TODO remove the example below once complete:
-    #condition     = can(regex("^[a-z0-9]{5,50}$", var.name))
-    #error_message = "The name must be between 5 and 50 characters long and can only contain lowercase letters and numbers."
+    condition     = can(regex("^[a-zA-Z0-9][a-zA-Z0-9-]{1,62}[a-zA-Z0-9]$", var.name))
+    error_message = "The name must be between 3 and 64 characters long, begin with a letter or number, end with a letter or number, and contain only letters, numbers, and hyphens."
   }
 }
 
@@ -60,7 +191,7 @@ variable "diagnostic_settings" {
   }))
   default     = {}
   description = <<DESCRIPTION
-A map of diagnostic settings to create on the Key Vault. The map key is deliberately arbitrary to avoid issues where map keys maybe unknown at plan time.
+A map of diagnostic settings to create on the Traffic Manager Profile. The map key is deliberately arbitrary to avoid issues where map keys maybe unknown at plan time.
 
 - `name` - (Optional) The name of the diagnostic setting. One will be generated if not set, however this will not be unique if you want to create multiple diagnostic setting resources.
 - `log_categories` - (Optional) A set of log categories to send to the log analytics workspace. Defaults to `[]`.
@@ -101,134 +232,139 @@ DESCRIPTION
   nullable    = false
 }
 
-variable "lock" {
-  type = object({
-    kind = string
-    name = optional(string, null)
-  })
-  default     = null
-  description = <<DESCRIPTION
-Controls the Resource Lock configuration for this resource. The following properties can be specified:
-
-- `kind` - (Required) The type of lock. Possible values are `\"CanNotDelete\"` and `\"ReadOnly\"`.
-- `name` - (Optional) The name of the lock. If not specified, a name will be generated based on the `kind` value. Changing this forces the creation of a new resource.
-DESCRIPTION
+variable "endpoints" {
+  type = list(object({
+    name                = string
+    target_resource_id  = optional(string, null)
+    target              = optional(string, null)
+    endpoint_type       = string
+    weight              = optional(number, null)
+    priority            = optional(number, null)
+    endpoint_location   = optional(string, null)
+    endpoint_status     = optional(string, "Enabled")
+    min_child_endpoints = optional(number, null)
+    geo_mappings        = optional(list(string), [])
+    subnets = optional(list(object({
+      first = string
+      last  = optional(string, null)
+      scope = optional(number, null)
+    })), [])
+    custom_headers = optional(list(object({
+      name  = string
+      value = string
+    })), [])
+  }))
+  default     = []
+  description = "List of Traffic Manager endpoints."
 
   validation {
-    condition     = var.lock != null ? contains(["CanNotDelete", "ReadOnly"], var.lock.kind) : true
-    error_message = "The lock level must be one of: 'None', 'CanNotDelete', or 'ReadOnly'."
+    condition = alltrue([
+      for ep in var.endpoints :
+      contains(["Azure", "ExternalEndpoints", "NestedEndpoints"], ep.endpoint_type)
+    ])
+    error_message = "Each endpoint_type must be one of: Azure, ExternalEndpoints, or NestedEndpoints."
+  }
+  validation {
+    condition = alltrue([
+      for ep in var.endpoints :
+      ep.endpoint_type == "Azure" ? ep.target_resource_id != null : true
+    ])
+    error_message = "For Azure endpoint_type, target_resource_id must be specified."
+  }
+  validation {
+    condition = alltrue([
+      for ep in var.endpoints :
+      ep.endpoint_type == "ExternalEndpoints" ? ep.target != null : true
+    ])
+    error_message = "For ExternalEndpoints endpoint_type, target must be specified."
   }
 }
 
-# tflint-ignore: terraform_unused_declarations
-variable "managed_identities" {
+variable "max_return" {
+  type        = number
+  default     = null
+  description = "The amount of endpoints to return for DNS queries to this Profile. Possible values range from 1 to 8. This argument is only valid for Traffic Manager profiles with routing_method set to MultiValue."
+
+  validation {
+    condition     = var.max_return == null ? true : (var.max_return >= 1 && var.max_return <= 8)
+    error_message = "The max_return must be between 1 and 8."
+  }
+}
+
+variable "monitor_config" {
   type = object({
-    system_assigned            = optional(bool, false)
-    user_assigned_resource_ids = optional(set(string), [])
+    protocol                     = string
+    port                         = number
+    path                         = optional(string, null)
+    interval_in_seconds          = optional(number, 30)
+    timeout_in_seconds           = optional(number, 10)
+    tolerated_number_of_failures = optional(number, 3)
+    expected_status_code_ranges  = optional(list(string), [])
+    custom_headers = optional(list(object({
+      name  = string
+      value = string
+    })), [])
   })
-  default     = {}
-  description = <<DESCRIPTION
-Controls the Managed Identity configuration on this resource. The following properties can be specified:
+  default = {
+    protocol                     = "HTTP"
+    port                         = 80
+    path                         = "/"
+    interval_in_seconds          = 30
+    timeout_in_seconds           = 10
+    tolerated_number_of_failures = 3
+    expected_status_code_ranges  = ["200-299"]
+  }
+  description = "The endpoint monitoring configuration of the Traffic Manager profile."
 
-- `system_assigned` - (Optional) Specifies if the System Assigned Managed Identity should be enabled.
-- `user_assigned_resource_ids` - (Optional) Specifies a list of User Assigned Managed Identity resource IDs to be assigned to this resource.
-DESCRIPTION
-  nullable    = false
+  validation {
+    condition     = contains(["HTTP", "HTTPS", "TCP"], var.monitor_config.protocol)
+    error_message = "The monitor_config.protocol must be one of: HTTP, HTTPS, or TCP."
+  }
+  validation {
+    condition     = var.monitor_config.port >= 1 && var.monitor_config.port <= 65535
+    error_message = "The monitor_config.port must be between 1 and 65535."
+  }
+  validation {
+    condition     = var.monitor_config.protocol == "TCP" ? var.monitor_config.path == null : true
+    error_message = "The monitor_config.path must be null when protocol is TCP."
+  }
 }
 
-variable "private_endpoints" {
-  type = map(object({
-    name = optional(string, null)
-    role_assignments = optional(map(object({
-      role_definition_id_or_name             = string
-      principal_id                           = string
-      description                            = optional(string, null)
-      skip_service_principal_aad_check       = optional(bool, false)
-      condition                              = optional(string, null)
-      condition_version                      = optional(string, null)
-      delegated_managed_identity_resource_id = optional(string, null)
-    })), {})
-    lock = optional(object({
-      kind = string
-      name = optional(string, null)
-    }), null)
-    tags                                    = optional(map(string), null)
-    subnet_resource_id                      = string
-    private_dns_zone_group_name             = optional(string, "default")
-    private_dns_zone_resource_ids           = optional(set(string), [])
-    application_security_group_associations = optional(map(string), {})
-    private_service_connection_name         = optional(string, null)
-    network_interface_name                  = optional(string, null)
-    location                                = optional(string, null)
-    resource_group_name                     = optional(string, null)
-    ip_configurations = optional(map(object({
-      name               = string
-      private_ip_address = string
-    })), {})
-  }))
-  default     = {}
-  description = <<DESCRIPTION
-A map of private endpoints to create on this resource. The map key is deliberately arbitrary to avoid issues where map keys maybe unknown at plan time.
+variable "profile_status" {
+  type        = string
+  default     = "Enabled"
+  description = "The status of the Traffic Manager profile. Possible values are: Enabled and Disabled."
 
-- `name` - (Optional) The name of the private endpoint. One will be generated if not set.
-- `role_assignments` - (Optional) A map of role assignments to create on the private endpoint. The map key is deliberately arbitrary to avoid issues where map keys maybe unknown at plan time. See `var.role_assignments` for more information.
-- `lock` - (Optional) The lock level to apply to the private endpoint. Default is `None`. Possible values are `None`, `CanNotDelete`, and `ReadOnly`.
-- `tags` - (Optional) A mapping of tags to assign to the private endpoint.
-- `subnet_resource_id` - The resource ID of the subnet to deploy the private endpoint in.
-- `private_dns_zone_group_name` - (Optional) The name of the private DNS zone group. One will be generated if not set.
-- `private_dns_zone_resource_ids` - (Optional) A set of resource IDs of private DNS zones to associate with the private endpoint. If not set, no zone groups will be created and the private endpoint will not be associated with any private DNS zones. DNS records must be managed external to this module.
-- `application_security_group_resource_ids` - (Optional) A map of resource IDs of application security groups to associate with the private endpoint. The map key is deliberately arbitrary to avoid issues where map keys maybe unknown at plan time.
-- `private_service_connection_name` - (Optional) The name of the private service connection. One will be generated if not set.
-- `network_interface_name` - (Optional) The name of the network interface. One will be generated if not set.
-- `location` - (Optional) The Azure location where the resources will be deployed. Defaults to the location of the resource group.
-- `resource_group_name` - (Optional) The resource group where the resources will be deployed. Defaults to the resource group of this resource.
-- `ip_configurations` - (Optional) A map of IP configurations to create on the private endpoint. If not specified the platform will create one. The map key is deliberately arbitrary to avoid issues where map keys maybe unknown at plan time.
-  - `name` - The name of the IP configuration.
-  - `private_ip_address` - The private IP address of the IP configuration.
-DESCRIPTION
-  nullable    = false
+  validation {
+    condition     = contains(["Enabled", "Disabled"], var.profile_status)
+    error_message = "The profile_status must be either Enabled or Disabled."
+  }
 }
 
-# This variable is used to determine if the private_dns_zone_group block should be included,
-# or if it is to be managed externally, e.g. using Azure Policy.
-# https://github.com/Azure/terraform-azurerm-avm-res-keyvault-vault/issues/32
-# Alternatively you can use AzAPI, which does not have this issue.
-variable "private_endpoints_manage_dns_zone_group" {
-  type        = bool
-  default     = true
-  description = "Whether to manage private DNS zone groups with this module. If set to false, you must manage private DNS zone groups externally, e.g. using Azure Policy."
-  nullable    = false
-}
-
-variable "role_assignments" {
-  type = map(object({
-    role_definition_id_or_name             = string
-    principal_id                           = string
-    description                            = optional(string, null)
-    skip_service_principal_aad_check       = optional(bool, false)
-    condition                              = optional(string, null)
-    condition_version                      = optional(string, null)
-    delegated_managed_identity_resource_id = optional(string, null)
-  }))
-  default     = {}
-  description = <<DESCRIPTION
-A map of role assignments to create on this resource. The map key is deliberately arbitrary to avoid issues where map keys maybe unknown at plan time.
-
-- `role_definition_id_or_name` - The ID or name of the role definition to assign to the principal.
-- `principal_id` - The ID of the principal to assign the role to.
-- `description` - The description of the role assignment.
-- `skip_service_principal_aad_check` - If set to true, skips the Azure Active Directory check for the service principal in the tenant. Defaults to false.
-- `condition` - The condition which will be used to scope the role assignment.
-- `condition_version` - The version of the condition syntax. Valid values are '2.0'.
-
-> Note: only set `skip_service_principal_aad_check` to true if you are assigning a role to a service principal.
-DESCRIPTION
-  nullable    = false
-}
-
-# tflint-ignore: terraform_unused_declarations
 variable "tags" {
   type        = map(string)
-  default     = null
-  description = "(Optional) Tags of the resource."
+  default     = {}
+  description = "Tags to be applied to resources."
+}
+
+variable "traffic_routing_method" {
+  type        = string
+  default     = "Performance"
+  description = "Specifies the traffic routing method of the Traffic Manager profile. Possible values are: Geographic, MultiValue, Performance, Priority, Subnet, Weighted."
+
+  validation {
+    condition     = contains(["Geographic", "MultiValue", "Performance", "Priority", "Subnet", "Weighted"], var.traffic_routing_method)
+    error_message = "The traffic_routing_method must be one of: Geographic, MultiValue, Performance, Priority, Subnet, Weighted."
+  }
+}
+
+variable "ttl" {
+  type        = number
+  default     = 30
+  description = "The DNS Time-To-Live (TTL), in seconds. Possible values include 30 to 999999."
+
+  validation {
+    condition     = var.ttl >= 30 && var.ttl <= 999999
+    error_message = "The TTL must be between 30 and 999999 seconds."
+  }
 }

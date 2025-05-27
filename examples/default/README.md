@@ -6,20 +6,79 @@ This deploys the module in its simplest form.
 ```hcl
 terraform {
   required_version = "~> 1.5"
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "~> 3.74"
-    }
-    modtm = {
-      source  = "azure/modtm"
-      version = "~> 0.3"
-    }
-    random = {
-      source  = "hashicorp/random"
-      version = "~> 3.5"
-    }
+}
+
+# Creating a sample web app for use as an endpoint
+resource "azurerm_service_plan" "example" {
+  name                = "${module.naming.app_service_plan.name_unique}-example"
+  location            = azurerm_resource_group.this.location
+  resource_group_name = azurerm_resource_group.this.name
+  os_type             = "Windows"
+  sku_name            = "S1"
+}
+
+resource "azurerm_windows_web_app" "example1" {
+  name                = "${module.naming.app_service.name_unique}-example1"
+  location            = azurerm_resource_group.this.location
+  resource_group_name = azurerm_resource_group.this.name
+  service_plan_id     = azurerm_service_plan.example.id
+
+  site_config {}
+}
+
+resource "azurerm_windows_web_app" "example2" {
+  name                = "${module.naming.app_service.name_unique}-example2"
+  location            = azurerm_resource_group.this.location
+  resource_group_name = azurerm_resource_group.this.name
+  service_plan_id     = azurerm_service_plan.example.id
+
+  site_config {}
+}
+
+# This is the module call
+module "traffic_manager" {
+  source              = "../../"
+  name                = module.naming.traffic_manager_profile.name_unique
+  resource_group_name = azurerm_resource_group.this.name
+  location            = azurerm_resource_group.this.location
+
+  traffic_routing_method = "Priority"
+  profile_status         = "Enabled"
+  ttl                    = 60
+
+  monitor_config = {
+    protocol                     = "HTTP"
+    port                         = 80
+    path                         = "/"
+    interval_in_seconds          = 30
+    timeout_in_seconds           = 10
+    tolerated_number_of_failures = 3
+    expected_status_code_ranges  = ["200-299"]
   }
+
+  endpoints = [
+    {
+      name               = "primary"
+      endpoint_type      = "Azure"
+      target_resource_id = azurerm_windows_web_app.example1.id
+      priority           = 1
+      endpoint_status    = "Enabled"
+    },
+    {
+      name               = "secondary"
+      endpoint_type      = "Azure"
+      target_resource_id = azurerm_windows_web_app.example2.id
+      priority           = 2
+      endpoint_status    = "Enabled"
+    }
+  ]
+
+  tags = {
+    environment = "example"
+    owner       = "terraform"
+  }
+
+  enable_telemetry = var.enable_telemetry
 }
 
 provider "azurerm" {
@@ -30,8 +89,8 @@ provider "azurerm" {
 ## Section to provide a random Azure region for the resource group
 # This allows us to randomize the region for the resource group.
 module "regions" {
-  source  = "Azure/regions/azurerm"
-  version = "~> 0.3"
+  source  = "Azure/avm-utl-regions/azurerm"
+  version = "~> 0.1"
 }
 
 # This allows us to randomize the region for the resource group.
@@ -53,19 +112,77 @@ resource "azurerm_resource_group" "this" {
   name     = module.naming.resource_group.name_unique
 }
 
-# This is the module call
-# Do not specify location here due to the randomization above.
-# Leaving location as `null` will cause the module to use the resource group location
-# with a data source.
-module "test" {
-  source = "../../"
-  # source             = "Azure/avm-<res/ptn>-<name>/azurerm"
-  # ...
+# Creating a sample web app for use as an endpoint
+resource "azurerm_service_plan" "example" {
+  name                = "${module.naming.app_service_plan.name_unique}-example"
   location            = azurerm_resource_group.this.location
-  name                = "TODO" # TODO update with module.naming.<RESOURCE_TYPE>.name_unique
   resource_group_name = azurerm_resource_group.this.name
+  os_type             = "Windows"
+  sku_name            = "S1"
+}
 
-  enable_telemetry = var.enable_telemetry # see variables.tf
+resource "azurerm_windows_web_app" "example1" {
+  name                = "${module.naming.app_service.name_unique}-example1"
+  location            = azurerm_resource_group.this.location
+  resource_group_name = azurerm_resource_group.this.name
+  service_plan_id     = azurerm_service_plan.example.id
+
+  site_config {}
+}
+
+resource "azurerm_windows_web_app" "example2" {
+  name                = "${module.naming.app_service.name_unique}-example2"
+  location            = azurerm_resource_group.this.location
+  resource_group_name = azurerm_resource_group.this.name
+  service_plan_id     = azurerm_service_plan.example.id
+
+  site_config {}
+}
+
+# This is the module call
+module "traffic_manager" {
+  source              = "../../"
+  name                = module.naming.traffic_manager_profile.name_unique
+  resource_group_name = azurerm_resource_group.this.name
+  location            = azurerm_resource_group.this.location
+
+  traffic_routing_method = "Priority"
+  profile_status         = "Enabled"
+  ttl                    = 60
+
+  monitor_config = {
+    protocol                     = "HTTP"
+    port                         = 80
+    path                         = "/"
+    interval_in_seconds          = 30
+    timeout_in_seconds           = 10
+    tolerated_number_of_failures = 3
+    expected_status_code_ranges  = ["200-299"]
+  }
+
+  endpoints = [
+    {
+      name               = "primary"
+      endpoint_type      = "Azure"
+      target_resource_id = azurerm_windows_web_app.example1.id
+      priority           = 1
+      endpoint_status    = "Enabled"
+    },
+    {
+      name               = "secondary"
+      endpoint_type      = "Azure"
+      target_resource_id = azurerm_windows_web_app.example2.id
+      priority           = 2
+      endpoint_status    = "Enabled"
+    }
+  ]
+
+  tags = {
+    environment = "example"
+    owner       = "terraform"
+  }
+
+  enable_telemetry = var.enable_telemetry
 }
 ```
 
@@ -76,25 +193,14 @@ The following requirements are needed by this module:
 
 - <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (~> 1.5)
 
-- <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (~> 3.74)
-
-- <a name="requirement_modtm"></a> [modtm](#requirement\_modtm) (~> 0.3)
-
-- <a name="requirement_random"></a> [random](#requirement\_random) (~> 3.5)
-
-## Providers
-
-The following providers are used by this module:
-
-- <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) (~> 3.74)
-
-- <a name="provider_random"></a> [random](#provider\_random) (~> 3.5)
-
 ## Resources
 
 The following resources are used by this module:
 
 - [azurerm_resource_group.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) (resource)
+- [azurerm_service_plan.example](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/service_plan) (resource)
+- [azurerm_windows_web_app.example1](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/windows_web_app) (resource)
+- [azurerm_windows_web_app.example2](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/windows_web_app) (resource)
 - [random_integer.region_index](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/integer) (resource)
 
 <!-- markdownlint-disable MD013 -->
@@ -132,11 +238,11 @@ Version: ~> 0.3
 
 ### <a name="module_regions"></a> [regions](#module\_regions)
 
-Source: Azure/regions/azurerm
+Source: Azure/avm-utl-regions/azurerm
 
-Version: ~> 0.3
+Version: ~> 0.1
 
-### <a name="module_test"></a> [test](#module\_test)
+### <a name="module_traffic_manager"></a> [traffic\_manager](#module\_traffic\_manager)
 
 Source: ../../
 
