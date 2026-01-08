@@ -392,10 +392,6 @@ Description: The name of the Traffic Manager profile.
 
 Description: A map of the nested endpoints created.
 
-### <a name="output_resource"></a> [resource](#output\_resource)
-
-Description: The Traffic Manager profile resource.
-
 ### <a name="output_resource_id"></a> [resource\_id](#output\_resource\_id)
 
 Description: The resource ID of the Traffic Manager profile.

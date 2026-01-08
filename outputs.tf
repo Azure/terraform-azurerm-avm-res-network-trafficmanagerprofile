@@ -28,11 +28,6 @@ output "nested_endpoints" {
   value       = module.nested_endpoints
 }
 
-output "resource" {
-  description = "The Traffic Manager profile resource."
-  value       = azapi_resource.this
-}
-
 output "resource_id" {
   description = "The resource ID of the Traffic Manager profile."
   value       = azapi_resource.this.id
