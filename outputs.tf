@@ -8,11 +8,6 @@ output "external_endpoints" {
   value       = module.external_endpoints
 }
 
-output "fqdn" {
-  description = "The fully-qualified domain name (FQDN) of the Traffic Manager profile."
-  value       = azapi_resource.this.output.properties.dnsConfig.fqdn
-}
-
 output "id" {
   description = "The resource ID of the Traffic Manager profile."
   value       = azapi_resource.this.id

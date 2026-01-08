@@ -337,11 +337,11 @@ variable "tags" {
 
 variable "traffic_view_enrollment_status" {
   type        = string
-  default     = null
+  default     = "Disabled"
   description = "Indicates whether Traffic View is 'Enabled' or 'Disabled' for the Traffic Manager profile."
 
   validation {
-    condition     = var.traffic_view_enrollment_status == null || contains(["Enabled", "Disabled"], var.traffic_view_enrollment_status)
+    condition     = contains(["Enabled", "Disabled"], var.traffic_view_enrollment_status)
     error_message = "Traffic view enrollment status must be one of: 'Enabled', 'Disabled'."
   }
 }

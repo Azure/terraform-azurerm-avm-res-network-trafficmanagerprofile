@@ -362,7 +362,7 @@ Description: Indicates whether Traffic View is 'Enabled' or 'Disabled' for the T
 
 Type: `string`
 
-Default: `null`
+Default: `"Disabled"`
 
 ## Outputs
 
@@ -375,10 +375,6 @@ Description: A map of the Azure endpoints created.
 ### <a name="output_external_endpoints"></a> [external\_endpoints](#output\_external\_endpoints)
 
 Description: A map of the external endpoints created.
-
-### <a name="output_fqdn"></a> [fqdn](#output\_fqdn)
-
-Description: The fully-qualified domain name (FQDN) of the Traffic Manager profile.
 
 ### <a name="output_id"></a> [id](#output\_id)
 
