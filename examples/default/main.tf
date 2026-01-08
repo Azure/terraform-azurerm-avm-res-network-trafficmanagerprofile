@@ -75,18 +75,18 @@ module "test" {
 
   # Traffic Manager specific configuration
   traffic_routing_method = "Performance"
-  
+
   dns_config = {
     relative_name = "tm-${random_string.tm_suffix.result}"
     ttl           = 60
   }
 
   monitor_config = {
-    protocol            = "HTTPS"
-    port                = 443
-    path                = "/"
-    interval_in_seconds = 30
-    timeout_in_seconds  = 10
+    protocol                     = "HTTPS"
+    port                         = 443
+    path                         = "/"
+    interval_in_seconds          = 30
+    timeout_in_seconds           = 10
     tolerated_number_of_failures = 3
   }
 

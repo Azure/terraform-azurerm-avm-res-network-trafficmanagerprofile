@@ -14,7 +14,7 @@ resource "azapi_resource" "this" {
       minChildEndpointsIPv4 = var.min_child_endpoints_ipv4
       minChildEndpointsIPv6 = var.min_child_endpoints_ipv6
       geoMapping            = var.geo_mapping
-      subnets               = var.subnets != null ? [
+      subnets = var.subnets != null ? [
         for subnet in var.subnets : {
           first = subnet.first
           last  = subnet.last != null ? subnet.last : null
@@ -32,7 +32,7 @@ resource "azapi_resource" "this" {
     }
   }
 
-  response_export_values = ["*"]
+  response_export_values    = ["*"]
   schema_validation_enabled = false
 
   dynamic "timeouts" {

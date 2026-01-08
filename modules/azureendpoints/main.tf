@@ -5,14 +5,14 @@ resource "azapi_resource" "this" {
 
   body = {
     properties = {
-      targetResourceId       = var.target_resource_id
-      endpointStatus         = var.endpoint_status
-      weight                 = var.weight
-      priority               = var.priority
-      endpointLocation       = var.endpoint_location
-      minChildEndpoints      = var.min_child_endpoints
-      geoMapping             = var.geo_mapping
-      subnets                = var.subnets != null ? [
+      targetResourceId  = var.target_resource_id
+      endpointStatus    = var.endpoint_status
+      weight            = var.weight
+      priority          = var.priority
+      endpointLocation  = var.endpoint_location
+      minChildEndpoints = var.min_child_endpoints
+      geoMapping        = var.geo_mapping
+      subnets = var.subnets != null ? [
         for subnet in var.subnets : {
           first = subnet.first
           last  = subnet.last != null ? subnet.last : null
@@ -30,7 +30,7 @@ resource "azapi_resource" "this" {
     }
   }
 
-  response_export_values = ["*"]
+  response_export_values    = ["*"]
   schema_validation_enabled = false
 
   dynamic "timeouts" {
