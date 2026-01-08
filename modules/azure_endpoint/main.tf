@@ -20,5 +20,5 @@ resource "azapi_resource" "this" {
       weight           = var.weight
     }
   }
-  response_export_values = ["*"]
+  response_export_values = []
 }
