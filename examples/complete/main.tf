@@ -16,13 +16,22 @@ terraform {
 provider "azapi" {}
 
 ## Section to provide a random Azure region for the resource group
+# Filter to only regions that support availability zones for zone-redundant resources
 module "regions" {
   source  = "Azure/avm-utl-regions/azurerm"
   version = "0.9.3"
 }
 
+locals {
+  # Filter regions that support availability zones
+  regions_with_zones = [
+    for region in module.regions.regions : region
+    if length(coalesce(region.zones, [])) > 0
+  ]
+}
+
 resource "random_integer" "region_index" {
-  max = length(module.regions.regions) - 1
+  max = length(local.regions_with_zones) - 1
   min = 0
 }
 
@@ -41,7 +50,7 @@ resource "random_string" "dns_suffix" {
 
 # Create resource group using azapi
 resource "azapi_resource" "resource_group" {
-  location = module.regions.regions[random_integer.region_index.result].name
+  location = local.regions_with_zones[random_integer.region_index.result].name
   name     = module.naming.resource_group.name_unique
   type     = "Microsoft.Resources/resourceGroups@2024-03-01"
   body     = {}
