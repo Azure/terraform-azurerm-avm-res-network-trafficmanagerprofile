@@ -161,6 +161,10 @@ Description: The name of the nested endpoint.
 
 Description: The nested endpoint resource.
 
+### <a name="output_resource_id"></a> [resource\_id](#output\_resource\_id)
+
+Description: The resource ID of the nested endpoint.
+
 ## Modules
 
 No modules.

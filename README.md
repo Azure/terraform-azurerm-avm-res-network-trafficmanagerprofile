@@ -342,6 +342,7 @@ map(object({
     condition                              = optional(string, null)
     condition_version                      = optional(string, null)
     delegated_managed_identity_resource_id = optional(string, null)
+    principal_type                         = optional(string, null)
   }))
 ```
 
@@ -394,6 +395,10 @@ Description: A map of the nested endpoints created.
 ### <a name="output_resource"></a> [resource](#output\_resource)
 
 Description: The Traffic Manager profile resource.
+
+### <a name="output_resource_id"></a> [resource\_id](#output\_resource\_id)
+
+Description: The resource ID of the Traffic Manager profile.
 
 ## Modules
 

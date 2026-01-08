@@ -139,6 +139,10 @@ Description: The name of the Azure endpoint.
 
 Description: The Azure endpoint resource.
 
+### <a name="output_resource_id"></a> [resource\_id](#output\_resource\_id)
+
+Description: The resource ID of the Azure endpoint.
+
 ## Modules
 
 No modules.

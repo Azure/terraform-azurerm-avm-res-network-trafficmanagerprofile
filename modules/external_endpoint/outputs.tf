@@ -12,3 +12,8 @@ output "resource" {
   description = "The external endpoint resource."
   value       = azapi_resource.this
 }
+
+output "resource_id" {
+  description = "The resource ID of the external endpoint."
+  value       = azapi_resource.this.id
+}

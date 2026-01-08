@@ -139,6 +139,10 @@ Description: The name of the external endpoint.
 
 Description: The external endpoint resource.
 
+### <a name="output_resource_id"></a> [resource\_id](#output\_resource\_id)
+
+Description: The resource ID of the external endpoint.
+
 ## Modules
 
 No modules.
