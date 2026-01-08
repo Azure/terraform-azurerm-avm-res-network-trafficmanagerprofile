@@ -1,6 +1,34 @@
-output "private_endpoints" {
-  description = <<DESCRIPTION
-  A map of the private endpoints created.
-  DESCRIPTION
-  value       = var.private_endpoints_manage_dns_zone_group ? azurerm_private_endpoint.this_managed_dns_zone_groups : azurerm_private_endpoint.this_unmanaged_dns_zone_groups
+output "azure_endpoints" {
+  description = "A map of the Azure endpoints created."
+  value       = module.azure_endpoints
+}
+
+output "external_endpoints" {
+  description = "A map of the external endpoints created."
+  value       = module.external_endpoints
+}
+
+output "fqdn" {
+  description = "The fully-qualified domain name (FQDN) of the Traffic Manager profile."
+  value       = azapi_resource.this.output.properties.dnsConfig.fqdn
+}
+
+output "id" {
+  description = "The resource ID of the Traffic Manager profile."
+  value       = azapi_resource.this.id
+}
+
+output "name" {
+  description = "The name of the Traffic Manager profile."
+  value       = azapi_resource.this.name
+}
+
+output "nested_endpoints" {
+  description = "A map of the nested endpoints created."
+  value       = module.nested_endpoints
+}
+
+output "resource" {
+  description = "The Traffic Manager profile resource."
+  value       = azapi_resource.this
 }

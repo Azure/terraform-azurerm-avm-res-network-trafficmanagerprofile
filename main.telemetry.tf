@@ -25,7 +25,8 @@ locals {
   avm_azapi_header = join(" ", [for k, v in local.avm_azapi_headers : "${k}=${v}"])
 }
 locals {
-  main_location = var.location
+  # Traffic Manager is always deployed to the "global" location
+  main_location = "global"
 }
 
 locals {

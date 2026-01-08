@@ -16,18 +16,15 @@ terraform {
 provider "azapi" {}
 
 ## Section to provide a random Azure region for the resource group
-# This allows us to randomize the region for the resource group.
 module "regions" {
   source  = "Azure/avm-utl-regions/azurerm"
   version = "~> 0.1"
 }
 
-# This allows us to randomize the region for the resource group.
 resource "random_integer" "region_index" {
   max = length(module.regions.regions) - 1
   min = 0
 }
-## End of section to provide a random Azure region for the resource group
 
 # This ensures we have unique CAF compliant names for our resources.
 module "naming" {
@@ -50,12 +47,34 @@ resource "azapi_resource" "resource_group" {
   body     = {}
 }
 
-# This is the module call
-module "test" {
+# Create a public IP for the Azure endpoint
+resource "azapi_resource" "public_ip" {
+  location  = azapi_resource.resource_group.location
+  name      = module.naming.public_ip.name_unique
+  parent_id = azapi_resource.resource_group.id
+  type      = "Microsoft.Network/publicIPAddresses@2024-01-01"
+  body = {
+    properties = {
+      publicIPAllocationMethod = "Static"
+      publicIPAddressVersion   = "IPv4"
+      dnsSettings = {
+        domainNameLabel = "avm-pip-${random_string.dns_suffix.result}"
+      }
+    }
+    sku = {
+      name = "Standard"
+      tier = "Regional"
+    }
+  }
+  response_export_values = ["*"]
+}
+
+# Traffic Manager Profile with Weighted routing and multiple endpoint types
+module "traffic_manager" {
   source = "../../"
 
   dns_config = {
-    relative_name = "avm-tm-${random_string.dns_suffix.result}"
+    relative_name = "avm-tm-complete-${random_string.dns_suffix.result}"
     ttl           = 30
   }
   monitor_config = {
@@ -65,11 +84,35 @@ module "test" {
     interval_in_seconds          = 30
     timeout_in_seconds           = 10
     tolerated_number_of_failures = 3
+    expected_status_code_ranges = [
+      {
+        min = 200
+        max = 299
+      }
+    ]
   }
   name                   = module.naming.traffic_manager_profile.name_unique
   resource_group_name    = azapi_resource.resource_group.name
   traffic_routing_method = "Weighted"
-  enable_telemetry       = var.enable_telemetry
+  # Azure endpoint pointing to the public IP
+  azure_endpoints = {
+    "primary" = {
+      name               = "azure-endpoint-primary"
+      target_resource_id = azapi_resource.public_ip.id
+      weight             = 100
+      enabled            = true
+    }
+  }
+  enable_telemetry = var.enable_telemetry
+  # External endpoint pointing to an external website
+  external_endpoints = {
+    "external" = {
+      name   = "external-endpoint-1"
+      target = "www.example.com"
+      weight = 50
+    }
+  }
+  profile_status = "Enabled"
 
   depends_on = [azapi_resource.resource_group]
 }

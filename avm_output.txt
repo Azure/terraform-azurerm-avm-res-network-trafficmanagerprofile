@@ -1,0 +1,84 @@
+avm-latest: Pulling from azterraform
+Digest: sha256:ecd3fe48c05ef3a4942655b53781a4cdde635806f258eaa17028e14034389da2
+Status: Image is up to date for mcr.microsoft.com/azterraform:avm-latest
+Running pre-commit...
+porch run  -f "git::https://github.com/Azure/avm-terraform-governance//porch-configs/pre-commit.porch.yaml?ref=main" 
+[09:07:08.769] INFO: Starting Precommit > Disable git autocrlf 
+[09:07:08.775] INFO: Finished Precommit > Disable git autocrlf in 0s 
+[09:07:08.775] INFO: Starting Precommit > Clone Governance repo 
+[09:07:09.696] INFO: Finished Precommit > Clone Governance repo in 1s 
+[09:07:09.696] INFO: Starting Precommit > Grept apply 
+[09:07:19.697] INFO: Running Precommit > Grept apply: [10s] 
+[09:07:27.790] INFO: Finished Precommit > Grept apply in 18s 
+[09:07:27.791] INFO: Starting Precommit > Clean Governance repo 
+[09:07:27.794] INFO: Finished Precommit > Clean Governance repo in 0s 
+[09:07:27.795] INFO: Starting Precommit > mapotf transform 
+[09:07:30.638] INFO: Finished Precommit > mapotf transform in 3s 
+[09:07:30.638] INFO: Starting Precommit > install Terraform 
+[09:07:31.972] INFO: Finished Precommit > install Terraform in 1s 
+[09:07:31.972] INFO: Starting Precommit > mapotf clean 
+[09:07:33.662] INFO: Finished Precommit > mapotf clean in 2s 
+[09:07:33.663] INFO: Starting Precommit > avmfix > root module > avmfix 
+[09:07:35.359] INFO: Finished Precommit > avmfix > root module > avmfix in 2s 
+[09:07:35.359] INFO: Starting Precommit > avmfix > submodules (serial) > [azure_endpoint] > avmfix 
+[09:07:37.135] INFO: Finished Precommit > avmfix > submodules (serial) > [azure_endpoint] > avmfix in 2s 
+[09:07:37.136] INFO: Starting Precommit > avmfix > submodules (serial) > [external_endpoint] > avmfix 
+[09:07:38.916] INFO: Finished Precommit > avmfix > submodules (serial) > [external_endpoint] > avmfix in 2s 
+[09:07:38.916] INFO: Starting Precommit > avmfix > submodules (serial) > [nested_endpoint] > avmfix 
+[09:07:40.818] INFO: Finished Precommit > avmfix > submodules (serial) > [nested_endpoint] > avmfix in 2s 
+[09:07:40.820] INFO: Starting Precommit > avmfix > examples (serial) > [complete] > avmfix 
+[09:07:42.568] INFO: Finished Precommit > avmfix > examples (serial) > [complete] > avmfix in 2s 
+[09:07:42.569] INFO: Starting Precommit > avmfix > examples (serial) > [default] > avmfix 
+[09:07:44.360] INFO: Finished Precommit > avmfix > examples (serial) > [default] > avmfix in 2s 
+[09:07:44.361] INFO: Starting Precommit > Generate docs > Generate module docs (parallel) > [azure_endpoint] > Generate module docs 
+[09:07:44.361] INFO: Starting Precommit > Generate docs > Generate module docs (parallel) > [nested_endpoint] > Generate module docs 
+[09:07:44.361] INFO: Starting Precommit > Generate docs > Generate root module docs 
+[09:07:44.361] INFO: Starting Precommit > Generate docs > Generate (parallel) > [default] > Generate example docs 
+[09:07:44.377] INFO: Starting Precommit > Generate docs > Generate module docs (parallel) > [external_endpoint] > Generate module docs 
+[09:07:44.377] INFO: Starting Precommit > Generate docs > Generate (parallel) > [complete] > Generate example docs 
+[09:07:44.385] INFO: Finished Precommit > Generate docs > Generate module docs (parallel) > [azure_endpoint] > Generate module docs in 0s 
+[09:07:44.385] INFO: Finished Precommit > Generate docs > Generate (parallel) > [default] > Generate example docs in 0s 
+[09:07:44.387] INFO: Finished Precommit > Generate docs > Generate module docs (parallel) > [nested_endpoint] > Generate module docs in 0s 
+[09:07:44.396] INFO: Finished Precommit > Generate docs > Generate (parallel) > [complete] > Generate example docs in 0s 
+[09:07:44.400] INFO: Finished Precommit > Generate docs > Generate module docs (parallel) > [external_endpoint] > Generate module docs in 0s 
+[09:07:44.418] INFO: Finished Precommit > Generate docs > Generate root module docs in 0s 
+[09:07:44.418] INFO: Displaying results... 
+✓ Precommit
+  ✓ Disable git autocrlf
+  ✓ Clone Governance repo
+  ✓ Grept apply
+  ✓ Clean Governance repo
+  ✓ mapotf transform
+  ✓ install Terraform
+  ✓ mapotf clean
+  ✓ avmfix
+    ✓ root module
+      ✓ avmfix
+    ✓ submodules (serial)
+      ✓ [azure_endpoint]
+        ✓ avmfix
+      ✓ [external_endpoint]
+        ✓ avmfix
+      ✓ [nested_endpoint]
+        ✓ avmfix
+    ✓ examples (serial)
+      ✓ [complete]
+        ✓ avmfix
+      ✓ [default]
+        ✓ avmfix
+  ✓ Generate docs
+    ✓ Generate (parallel)
+      ✓ [default]
+        ✓ Generate example docs
+      ✓ [complete]
+        ✓ Generate example docs
+    ✓ Generate module docs (parallel)
+      ✓ [azure_endpoint]
+        ✓ Generate module docs
+      ✓ [nested_endpoint]
+        ✓ Generate module docs
+      ✓ [external_endpoint]
+        ✓ Generate module docs
+    ✓ Generate root module docs
+make: *** wait: No child processes.  Stop.
+Exit code: 2
