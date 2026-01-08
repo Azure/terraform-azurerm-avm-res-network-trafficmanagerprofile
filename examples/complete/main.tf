@@ -65,6 +65,7 @@ resource "azapi_resource" "public_ip" {
       name = "Standard"
       tier = "Regional"
     }
+    zones = ["1", "2", "3"]
   }
   response_export_values = ["*"]
 }
