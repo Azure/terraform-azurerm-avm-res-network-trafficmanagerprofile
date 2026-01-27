@@ -144,6 +144,7 @@ resource "azapi_resource" "role_assignment" {
       principalType                      = each.value.principal_type
       roleDefinitionId                   = strcontains(lower(each.value.role_definition_id_or_name), lower(local.role_definition_resource_substring)) ? each.value.role_definition_id_or_name : "/subscriptions/${local.subscription_id}/providers/Microsoft.Authorization/roleDefinitions/${each.value.role_definition_id_or_name}"
       description                        = each.value.description
+      principalType                      = each.value.principal_type
       conditionVersion                   = each.value.condition_version
       condition                          = each.value.condition
       delegatedManagedIdentityResourceId = each.value.delegated_managed_identity_resource_id
