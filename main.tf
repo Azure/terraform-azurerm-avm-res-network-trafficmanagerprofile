@@ -131,6 +131,7 @@ resource "azapi_resource" "role_assignment" {
   body = {
     properties = {
       principalId                        = each.value.principal_id
+      principalType                      = each.value.principal_type
       roleDefinitionId                   = strcontains(lower(each.value.role_definition_id_or_name), lower(local.role_definition_resource_substring)) ? each.value.role_definition_id_or_name : "/subscriptions/${local.subscription_id}/providers/Microsoft.Authorization/roleDefinitions/${each.value.role_definition_id_or_name}"
       description                        = each.value.description
       conditionVersion                   = each.value.condition_version
