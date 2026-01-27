@@ -26,6 +26,7 @@ The following resources are used by this module:
 - [azapi_resource.role_assignment](https://registry.terraform.io/providers/Azure/azapi/latest/docs/resources/resource) (resource)
 - [azapi_resource.this](https://registry.terraform.io/providers/Azure/azapi/latest/docs/resources/resource) (resource)
 - [modtm_telemetry.telemetry](https://registry.terraform.io/providers/azure/modtm/latest/docs/resources/telemetry) (resource)
+- [random_uuid.role_assignment](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/uuid) (resource)
 - [random_uuid.telemetry](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/uuid) (resource)
 - [azapi_client_config.telemetry](https://registry.terraform.io/providers/Azure/azapi/latest/docs/data-sources/client_config) (data source)
 - [azapi_client_config.this](https://registry.terraform.io/providers/Azure/azapi/latest/docs/data-sources/client_config) (data source)
@@ -376,9 +377,9 @@ Description: A map of the Azure endpoints created.
 
 Description: A map of the external endpoints created.
 
-### <a name="output_id"></a> [id](#output\_id)
+### <a name="output_fqdn"></a> [fqdn](#output\_fqdn)
 
-Description: The resource ID of the Traffic Manager profile.
+Description: The fully qualified domain name (FQDN) of the Traffic Manager profile.
 
 ### <a name="output_name"></a> [name](#output\_name)
 

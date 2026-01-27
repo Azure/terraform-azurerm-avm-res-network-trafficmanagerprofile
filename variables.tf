@@ -53,6 +53,10 @@ DESCRIPTION
     condition     = var.monitor_config.port >= 1 && var.monitor_config.port <= 65535
     error_message = "Monitor port must be between 1 and 65535."
   }
+  validation {
+    condition     = var.monitor_config.timeout_in_seconds < var.monitor_config.interval_in_seconds
+    error_message = "Monitor timeout_in_seconds must be less than interval_in_seconds."
+  }
 }
 
 variable "name" {
