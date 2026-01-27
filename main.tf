@@ -39,8 +39,9 @@ resource "azapi_resource" "this" {
   }
   create_headers         = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
   delete_headers         = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
+  ignore_null_property   = true
   read_headers           = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
-  response_export_values = []
+  response_export_values = ["properties.dnsConfig.fqdn", "properties.profileStatus"]
   tags                   = var.tags
   update_headers         = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
 }
@@ -121,11 +122,20 @@ resource "azapi_resource" "lock" {
   update_headers = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
 }
 
+# Generate UUIDs for role assignment names
+resource "random_uuid" "role_assignment" {
+  for_each = var.role_assignments
+
+  keepers = {
+    role_assignment_key = each.key
+  }
+}
+
 # Role assignments
 resource "azapi_resource" "role_assignment" {
   for_each = var.role_assignments
 
-  name      = each.key
+  name      = random_uuid.role_assignment[each.key].result
   parent_id = azapi_resource.this.id
   type      = "Microsoft.Authorization/roleAssignments@2022-04-01"
   body = {
