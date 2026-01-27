@@ -136,6 +136,9 @@ resource "azapi_resource" "role_assignment" {
       conditionVersion                   = each.value.condition_version
       condition                          = each.value.condition
       delegatedManagedIdentityResourceId = each.value.delegated_managed_identity_resource_id
+      # Note: each.value.skip_service_principal_aad_check is intentionally not used here.
+      # This module uses azapi_resource for role assignments, and skip_service_principal_aad_check
+      # is not part of the Microsoft.Authorization/roleAssignments ARM schema, so it cannot be set.
     }
   }
   create_headers = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
