@@ -19,7 +19,7 @@ provider "azapi" {}
 # Filter to only regions that support availability zones for zone-redundant resources
 module "regions" {
   source  = "Azure/avm-utl-regions/azurerm"
-  version = "~> 0.9"
+  version = "0.9.3"
 }
 
 locals {
@@ -38,7 +38,7 @@ resource "random_integer" "region_index" {
 # This ensures we have unique CAF compliant names for our resources.
 module "naming" {
   source  = "Azure/naming/azurerm"
-  version = "~> 0.4"
+  version = "0.4.3"
 }
 
 # Random string for unique DNS name
