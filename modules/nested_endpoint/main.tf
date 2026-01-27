@@ -23,5 +23,6 @@ resource "azapi_resource" "this" {
       weight           = var.weight
     }
   }
-  response_export_values = []
+  ignore_null_property   = true
+  response_export_values = ["properties.priority", "properties.endpointLocation"]
 }
