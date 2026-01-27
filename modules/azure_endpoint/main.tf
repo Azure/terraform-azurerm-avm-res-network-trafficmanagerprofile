@@ -21,4 +21,11 @@ resource "azapi_resource" "this" {
     }
   }
   response_export_values = []
+
+  lifecycle {
+    ignore_changes = [
+      body.properties.endpointLocation,
+      body.properties.priority,
+    ]
+  }
 }
