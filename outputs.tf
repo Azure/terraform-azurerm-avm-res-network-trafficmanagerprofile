@@ -10,7 +10,7 @@ output "external_endpoints" {
 
 output "fqdn" {
   description = "The fully qualified domain name (FQDN) of the Traffic Manager profile."
-  value       = jsondecode(azapi_resource.this.output).properties.dnsConfig.fqdn
+  value       = azapi_resource.this.output.properties.dnsConfig.fqdn
 }
 
 output "name" {
