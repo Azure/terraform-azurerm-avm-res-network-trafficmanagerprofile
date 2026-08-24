@@ -9,7 +9,7 @@ The following requirements are needed by this module:
 
 - <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (~> 1.5)
 
-- <a name="requirement_azapi"></a> [azapi](#requirement\_azapi) (~> 2.4)
+- <a name="requirement_azapi"></a> [azapi](#requirement\_azapi) (~> 2.12)
 
 ## Resources
 
@@ -96,6 +96,22 @@ Description: The list of countries/regions mapped to this endpoint when using th
 Type: `list(string)`
 
 Default: `null`
+
+### <a name="input_ignore_body_changes"></a> [ignore\_body\_changes](#input\_ignore\_body\_changes)
+
+Description: Body-relative paths to ignore for each AzAPI resource. Paths use dot notation. Changes take effect only after apply, and ignored configuration is not sent to Azure until the path is removed.
+
+- `network_trafficmanagerprofiles_nested_endpoints` - Paths ignored on the nested endpoint.
+
+Type:
+
+```hcl
+object({
+    network_trafficmanagerprofiles_nested_endpoints = optional(list(string), [])
+  })
+```
+
+Default: `{}`
 
 ### <a name="input_min_child_endpoints_ipv4"></a> [min\_child\_endpoints\_ipv4](#input\_min\_child\_endpoints\_ipv4)
 

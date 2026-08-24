@@ -227,6 +227,40 @@ DESCRIPTION
   nullable    = false
 }
 
+variable "ignore_body_changes" {
+  type = object({
+    network_trafficmanagerprofiles = optional(list(string), [])
+    authorization_locks            = optional(list(string), [])
+    authorization_role_assignments = optional(list(string), [])
+    insights_diagnostic_settings   = optional(list(string), [])
+    network_trafficmanagerprofiles_azure_endpoints = optional(object({
+      network_trafficmanagerprofiles_azure_endpoints = optional(list(string), [])
+    }), {})
+    network_trafficmanagerprofiles_external_endpoints = optional(object({
+      network_trafficmanagerprofiles_external_endpoints = optional(list(string), [])
+    }), {})
+    network_trafficmanagerprofiles_nested_endpoints = optional(object({
+      network_trafficmanagerprofiles_nested_endpoints = optional(list(string), [])
+    }), {})
+  })
+  default     = {}
+  description = <<DESCRIPTION
+Body-relative paths to ignore for each AzAPI resource. Paths use dot notation. Changes take effect only after apply, and ignored configuration is not sent to Azure until the path is removed.
+
+- `network_trafficmanagerprofiles` - Paths ignored on the Traffic Manager profile.
+- `authorization_locks` - Paths ignored on management locks.
+- `authorization_role_assignments` - Paths ignored on role assignments.
+- `insights_diagnostic_settings` - Paths ignored on diagnostic settings.
+- `network_trafficmanagerprofiles_azure_endpoints` - Paths passed to the Azure endpoint submodule.
+- `network_trafficmanagerprofiles_azure_endpoints.network_trafficmanagerprofiles_azure_endpoints` - Paths ignored on Azure endpoints.
+- `network_trafficmanagerprofiles_external_endpoints` - Paths passed to the external endpoint submodule.
+- `network_trafficmanagerprofiles_external_endpoints.network_trafficmanagerprofiles_external_endpoints` - Paths ignored on external endpoints.
+- `network_trafficmanagerprofiles_nested_endpoints` - Paths passed to the nested endpoint submodule.
+- `network_trafficmanagerprofiles_nested_endpoints.network_trafficmanagerprofiles_nested_endpoints` - Paths ignored on nested endpoints.
+DESCRIPTION
+  nullable    = false
+}
+
 variable "lock" {
   type = object({
     kind = string

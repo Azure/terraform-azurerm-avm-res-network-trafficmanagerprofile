@@ -11,7 +11,7 @@ The following requirements are needed by this module:
 
 - <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (~> 1.5)
 
-- <a name="requirement_azapi"></a> [azapi](#requirement\_azapi) (~> 2.4)
+- <a name="requirement_azapi"></a> [azapi](#requirement\_azapi) (~> 2.12)
 
 - <a name="requirement_modtm"></a> [modtm](#requirement\_modtm) (~> 0.3)
 
@@ -235,6 +235,43 @@ map(object({
       scope = optional(number)
     })), [])
   }))
+```
+
+Default: `{}`
+
+### <a name="input_ignore_body_changes"></a> [ignore\_body\_changes](#input\_ignore\_body\_changes)
+
+Description: Body-relative paths to ignore for each AzAPI resource. Paths use dot notation. Changes take effect only after apply, and ignored configuration is not sent to Azure until the path is removed.
+
+- `network_trafficmanagerprofiles` - Paths ignored on the Traffic Manager profile.
+- `authorization_locks` - Paths ignored on management locks.
+- `authorization_role_assignments` - Paths ignored on role assignments.
+- `insights_diagnostic_settings` - Paths ignored on diagnostic settings.
+- `network_trafficmanagerprofiles_azure_endpoints` - Paths passed to the Azure endpoint submodule.
+- `network_trafficmanagerprofiles_azure_endpoints.network_trafficmanagerprofiles_azure_endpoints` - Paths ignored on Azure endpoints.
+- `network_trafficmanagerprofiles_external_endpoints` - Paths passed to the external endpoint submodule.
+- `network_trafficmanagerprofiles_external_endpoints.network_trafficmanagerprofiles_external_endpoints` - Paths ignored on external endpoints.
+- `network_trafficmanagerprofiles_nested_endpoints` - Paths passed to the nested endpoint submodule.
+- `network_trafficmanagerprofiles_nested_endpoints.network_trafficmanagerprofiles_nested_endpoints` - Paths ignored on nested endpoints.
+
+Type:
+
+```hcl
+object({
+    network_trafficmanagerprofiles = optional(list(string), [])
+    authorization_locks            = optional(list(string), [])
+    authorization_role_assignments = optional(list(string), [])
+    insights_diagnostic_settings   = optional(list(string), [])
+    network_trafficmanagerprofiles_azure_endpoints = optional(object({
+      network_trafficmanagerprofiles_azure_endpoints = optional(list(string), [])
+    }), {})
+    network_trafficmanagerprofiles_external_endpoints = optional(object({
+      network_trafficmanagerprofiles_external_endpoints = optional(list(string), [])
+    }), {})
+    network_trafficmanagerprofiles_nested_endpoints = optional(object({
+      network_trafficmanagerprofiles_nested_endpoints = optional(list(string), [])
+    }), {})
+  })
 ```
 
 Default: `{}`

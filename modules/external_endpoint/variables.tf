@@ -51,6 +51,19 @@ variable "geo_mapping" {
   description = "The list of countries/regions mapped to this endpoint when using the Geographic traffic routing method."
 }
 
+variable "ignore_body_changes" {
+  type = object({
+    network_trafficmanagerprofiles_external_endpoints = optional(list(string), [])
+  })
+  default     = {}
+  description = <<DESCRIPTION
+Body-relative paths to ignore for each AzAPI resource. Paths use dot notation. Changes take effect only after apply, and ignored configuration is not sent to Azure until the path is removed.
+
+- `network_trafficmanagerprofiles_external_endpoints` - Paths ignored on the external endpoint.
+DESCRIPTION
+  nullable    = false
+}
+
 variable "priority" {
   type        = number
   default     = null

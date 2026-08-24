@@ -39,6 +39,7 @@ resource "azapi_resource" "this" {
   }
   create_headers         = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
   delete_headers         = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
+  ignore_body_changes    = length(var.ignore_body_changes.network_trafficmanagerprofiles) > 0 ? var.ignore_body_changes.network_trafficmanagerprofiles : null
   ignore_null_property   = true
   read_headers           = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
   response_export_values = ["properties.dnsConfig.fqdn", "properties.profileStatus"]
@@ -59,6 +60,7 @@ module "azure_endpoints" {
   enabled                    = each.value.enabled
   endpoint_location          = each.value.endpoint_location
   geo_mapping                = each.value.geo_mapping
+  ignore_body_changes        = var.ignore_body_changes.network_trafficmanagerprofiles_azure_endpoints
   priority                   = each.value.priority
   subnets                    = each.value.subnets
   weight                     = each.value.weight
@@ -77,6 +79,7 @@ module "external_endpoints" {
   enabled                    = each.value.enabled
   endpoint_location          = each.value.endpoint_location
   geo_mapping                = each.value.geo_mapping
+  ignore_body_changes        = var.ignore_body_changes.network_trafficmanagerprofiles_external_endpoints
   priority                   = each.value.priority
   subnets                    = each.value.subnets
   weight                     = each.value.weight
@@ -96,6 +99,7 @@ module "nested_endpoints" {
   enabled                    = each.value.enabled
   endpoint_location          = each.value.endpoint_location
   geo_mapping                = each.value.geo_mapping
+  ignore_body_changes        = var.ignore_body_changes.network_trafficmanagerprofiles_nested_endpoints
   min_child_endpoints_ipv4   = each.value.min_child_endpoints_ipv4
   min_child_endpoints_ipv6   = each.value.min_child_endpoints_ipv6
   priority                   = each.value.priority
@@ -116,10 +120,11 @@ resource "azapi_resource" "lock" {
       notes = var.lock.kind == "CanNotDelete" ? "Cannot delete the resource or its child resources." : "Cannot delete or modify the resource or its child resources."
     }
   }
-  create_headers = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
-  delete_headers = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
-  read_headers   = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
-  update_headers = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
+  create_headers      = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
+  delete_headers      = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
+  ignore_body_changes = length(var.ignore_body_changes.authorization_locks) > 0 ? var.ignore_body_changes.authorization_locks : null
+  read_headers        = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
+  update_headers      = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
 }
 
 # Generate UUIDs for role assignment names
@@ -152,10 +157,11 @@ resource "azapi_resource" "role_assignment" {
       # is not part of the Microsoft.Authorization/roleAssignments ARM schema, so it cannot be set.
     }
   }
-  create_headers = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
-  delete_headers = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
-  read_headers   = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
-  update_headers = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
+  create_headers      = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
+  delete_headers      = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
+  ignore_body_changes = length(var.ignore_body_changes.authorization_role_assignments) > 0 ? var.ignore_body_changes.authorization_role_assignments : null
+  read_headers        = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
+  update_headers      = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
 }
 
 # Diagnostic settings
@@ -189,8 +195,9 @@ resource "azapi_resource" "diagnostic_setting" {
       workspaceId      = each.value.workspace_resource_id
     }
   }
-  create_headers = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
-  delete_headers = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
-  read_headers   = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
-  update_headers = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
+  create_headers      = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
+  delete_headers      = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
+  ignore_body_changes = length(var.ignore_body_changes.insights_diagnostic_settings) > 0 ? var.ignore_body_changes.insights_diagnostic_settings : null
+  read_headers        = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
+  update_headers      = var.enable_telemetry ? { "User-Agent" : local.avm_azapi_header } : null
 }

@@ -20,6 +20,7 @@ resource "azapi_resource" "this" {
       weight           = var.weight
     }
   }
+  ignore_body_changes    = length(var.ignore_body_changes.network_trafficmanagerprofiles_azure_endpoints) > 0 ? var.ignore_body_changes.network_trafficmanagerprofiles_azure_endpoints : null
   ignore_null_property   = true
   response_export_values = ["properties.priority", "properties.endpointLocation"]
 }
