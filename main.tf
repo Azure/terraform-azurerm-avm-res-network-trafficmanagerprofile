@@ -26,7 +26,7 @@ resource "azapi_resource" "this" {
           }
         ] : []
         intervalInSeconds         = var.monitor_config.interval_in_seconds
-        path                      = var.monitor_config.path
+        path                      = var.monitor_config.protocol == "TCP" ? null : var.monitor_config.path
         port                      = var.monitor_config.port
         protocol                  = var.monitor_config.protocol
         timeoutInSeconds          = var.monitor_config.timeout_in_seconds
