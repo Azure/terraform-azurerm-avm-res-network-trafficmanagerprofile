@@ -2,7 +2,7 @@
 resource "azapi_resource" "this" {
   name      = var.name
   parent_id = var.traffic_manager_profile_id
-  type      = "Microsoft.Network/trafficmanagerprofiles/AzureEndpoints@2024-04-01-preview"
+  type      = var.resource_types.network_trafficmanagerprofiles_azure_endpoints
   body = {
     properties = {
       alwaysServe      = var.always_serve
@@ -22,5 +22,17 @@ resource "azapi_resource" "this" {
   }
   ignore_body_changes    = length(var.ignore_body_changes.network_trafficmanagerprofiles_azure_endpoints) > 0 ? var.ignore_body_changes.network_trafficmanagerprofiles_azure_endpoints : null
   ignore_null_property   = true
+  replace_triggers_refs  = ["properties.subnets"]
   response_export_values = ["properties.priority", "properties.endpointLocation"]
+  retry                  = var.retry
+
+  dynamic "timeouts" {
+    for_each = var.timeouts == null ? [] : [var.timeouts]
+    content {
+      create = timeouts.value.create
+      read   = timeouts.value.read
+      update = timeouts.value.update
+      delete = timeouts.value.delete
+    }
+  }
 }

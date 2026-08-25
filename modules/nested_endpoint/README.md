@@ -137,6 +137,44 @@ Type: `number`
 
 Default: `null`
 
+### <a name="input_resource_types"></a> [resource\_types](#input\_resource\_types)
+
+Description: Map of AzAPI resource type strings used by this submodule. Override any key to target a different API version.
+
+- `network_trafficmanagerprofiles_nested_endpoints` - Type for the nested endpoint resource.
+
+Type:
+
+```hcl
+object({
+    network_trafficmanagerprofiles_nested_endpoints = optional(string, "Microsoft.Network/trafficmanagerprofiles/NestedEndpoints@2024-04-01-preview")
+  })
+```
+
+Default: `{}`
+
+### <a name="input_retry"></a> [retry](#input\_retry)
+
+Description: Retry configuration applied to every supported AzAPI resource declared by this submodule. Defaults to `null` (no custom retry).
+
+- `error_message_regex`  - (Optional) A list of regex patterns matching error messages that trigger a retry.
+- `interval_seconds`     - (Optional) Initial interval between retries in seconds.
+- `max_interval_seconds` - (Optional) Maximum interval between retries in seconds.
+
+See <https://registry.terraform.io/providers/Azure/azapi/latest/docs/resources/resource#retry> for full semantics.
+
+Type:
+
+```hcl
+object({
+    error_message_regex  = optional(list(string))
+    interval_seconds     = optional(number)
+    max_interval_seconds = optional(number)
+  })
+```
+
+Default: `null`
+
 ### <a name="input_subnets"></a> [subnets](#input\_subnets)
 
 Description: The list of subnets, IP addresses, and/or address ranges mapped to this endpoint when using the Subnet traffic routing method.
@@ -153,6 +191,28 @@ list(object({
 
 Default: `[]`
 
+### <a name="input_timeouts"></a> [timeouts](#input\_timeouts)
+
+Description: Default per-operation timeouts applied to every supported AzAPI resource declared by this submodule. Defaults to `null` (provider defaults). Each value is a Go duration string (e.g. `30m`, `1h`).
+
+- `create` - (Optional) Timeout for create operations.
+- `read`   - (Optional) Timeout for read operations.
+- `update` - (Optional) Timeout for update operations.
+- `delete` - (Optional) Timeout for delete operations.
+
+Type:
+
+```hcl
+object({
+    create = optional(string)
+    read   = optional(string)
+    update = optional(string)
+    delete = optional(string)
+  })
+```
+
+Default: `null`
+
 ### <a name="input_weight"></a> [weight](#input\_weight)
 
 Description: The weight of this endpoint (1-1000) when using the Weighted traffic routing method.
@@ -165,6 +225,10 @@ Default: `null`
 
 The following outputs are exported:
 
+### <a name="output_endpoint_location"></a> [endpoint\_location](#output\_endpoint\_location)
+
+Description: The endpoint location returned by Azure.
+
 ### <a name="output_id"></a> [id](#output\_id)
 
 Description: The resource ID of the nested endpoint.
@@ -173,9 +237,9 @@ Description: The resource ID of the nested endpoint.
 
 Description: The name of the nested endpoint.
 
-### <a name="output_resource"></a> [resource](#output\_resource)
+### <a name="output_priority"></a> [priority](#output\_priority)
 
-Description: The nested endpoint resource.
+Description: The endpoint priority returned by Azure.
 
 ### <a name="output_resource_id"></a> [resource\_id](#output\_resource\_id)
 

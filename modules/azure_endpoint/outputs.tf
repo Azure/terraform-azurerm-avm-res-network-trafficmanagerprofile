@@ -8,9 +8,14 @@ output "name" {
   value       = azapi_resource.this.name
 }
 
-output "resource" {
-  description = "The Azure endpoint resource."
-  value       = azapi_resource.this
+output "endpoint_location" {
+  description = "The endpoint location returned by Azure."
+  value       = azapi_resource.this.output.properties.endpointLocation
+}
+
+output "priority" {
+  description = "The endpoint priority returned by Azure."
+  value       = azapi_resource.this.output.properties.priority
 }
 
 output "resource_id" {

@@ -356,6 +356,65 @@ Type: `string`
 
 Default: `"Enabled"`
 
+### <a name="input_resource_types"></a> [resource\_types](#input\_resource\_types)
+
+Description: AzAPI resource types and API versions used by this module. Override any key to target a different API version.
+
+- `network_trafficmanagerprofiles` - Type for the Traffic Manager profile resource.
+- `authorization_locks` - Type for management lock resources.
+- `authorization_role_assignments` - Type for role assignment resources.
+- `insights_diagnostic_settings` - Type for diagnostic setting resources.
+- `network_trafficmanagerprofiles_azure_endpoints` - Nested object cascaded to the Azure endpoint submodule.
+- `network_trafficmanagerprofiles_azure_endpoints.network_trafficmanagerprofiles_azure_endpoints` - Type for Azure endpoint resources.
+- `network_trafficmanagerprofiles_external_endpoints` - Nested object cascaded to the external endpoint submodule.
+- `network_trafficmanagerprofiles_external_endpoints.network_trafficmanagerprofiles_external_endpoints` - Type for external endpoint resources.
+- `network_trafficmanagerprofiles_nested_endpoints` - Nested object cascaded to the nested endpoint submodule.
+- `network_trafficmanagerprofiles_nested_endpoints.network_trafficmanagerprofiles_nested_endpoints` - Type for nested endpoint resources.
+
+Type:
+
+```hcl
+object({
+    network_trafficmanagerprofiles = optional(string, "Microsoft.Network/trafficmanagerprofiles@2024-04-01-preview")
+    authorization_locks            = optional(string, "Microsoft.Authorization/locks@2020-05-01")
+    authorization_role_assignments = optional(string, "Microsoft.Authorization/roleAssignments@2022-04-01")
+    insights_diagnostic_settings   = optional(string, "Microsoft.Insights/diagnosticSettings@2021-05-01-preview")
+    network_trafficmanagerprofiles_azure_endpoints = optional(object({
+      network_trafficmanagerprofiles_azure_endpoints = optional(string)
+    }), {})
+    network_trafficmanagerprofiles_external_endpoints = optional(object({
+      network_trafficmanagerprofiles_external_endpoints = optional(string)
+    }), {})
+    network_trafficmanagerprofiles_nested_endpoints = optional(object({
+      network_trafficmanagerprofiles_nested_endpoints = optional(string)
+    }), {})
+  })
+```
+
+Default: `{}`
+
+### <a name="input_retry"></a> [retry](#input\_retry)
+
+Description: Retry configuration applied to every supported AzAPI resource declared by the module and its applicable submodules. Defaults to `null` (no custom retry).
+
+- `error_message_regex`  - (Optional) A list of regex patterns matching error messages that trigger a retry.
+- `interval_seconds`     - (Optional) Initial interval between retries in seconds.
+- `max_interval_seconds` - (Optional) Maximum interval between retries in seconds.
+
+See <https://registry.terraform.io/providers/Azure/azapi/latest/docs/resources/resource#retry> for full semantics.
+
+Type:
+
+```hcl
+object({
+    error_message_regex  = optional(list(string))
+    interval_seconds     = optional(number)
+    max_interval_seconds = optional(number)
+  })
+```
+
+Default: `null`
+
 ### <a name="input_role_assignments"></a> [role\_assignments](#input\_role\_assignments)
 
 Description: A map of role assignments to create on this resource. The map key is deliberately arbitrary to avoid issues where map keys maybe unknown at plan time.
@@ -391,6 +450,28 @@ Default: `{}`
 Description: (Optional) Tags of the resource.
 
 Type: `map(string)`
+
+Default: `null`
+
+### <a name="input_timeouts"></a> [timeouts](#input\_timeouts)
+
+Description: Default per-operation timeouts applied to every supported AzAPI resource declared by the module and its applicable submodules. Defaults to `null` (provider defaults). Each value is a Go duration string (e.g. `30m`, `1h`).
+
+- `create` - (Optional) Timeout for create operations.
+- `read`   - (Optional) Timeout for read operations.
+- `update` - (Optional) Timeout for update operations.
+- `delete` - (Optional) Timeout for delete operations.
+
+Type:
+
+```hcl
+object({
+    create = optional(string)
+    read   = optional(string)
+    update = optional(string)
+    delete = optional(string)
+  })
+```
 
 Default: `null`
 
