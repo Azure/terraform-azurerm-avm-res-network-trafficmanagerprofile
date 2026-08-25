@@ -26,7 +26,7 @@ resource "azapi_resource" "this" {
   ignore_body_changes    = length(var.ignore_body_changes.network_trafficmanagerprofiles_nested_endpoints) > 0 ? var.ignore_body_changes.network_trafficmanagerprofiles_nested_endpoints : null
   ignore_null_property   = true
   replace_triggers_refs  = ["properties.subnets"]
-  response_export_values = ["properties.priority", "properties.endpointLocation"]
+  response_export_values = []
   retry                  = var.retry
 
   dynamic "timeouts" {

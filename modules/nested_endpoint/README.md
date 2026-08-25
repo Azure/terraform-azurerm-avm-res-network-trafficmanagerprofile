@@ -225,10 +225,6 @@ Default: `null`
 
 The following outputs are exported:
 
-### <a name="output_endpoint_location"></a> [endpoint\_location](#output\_endpoint\_location)
-
-Description: The endpoint location returned by Azure.
-
 ### <a name="output_id"></a> [id](#output\_id)
 
 Description: The resource ID of the nested endpoint.
@@ -236,10 +232,6 @@ Description: The resource ID of the nested endpoint.
 ### <a name="output_name"></a> [name](#output\_name)
 
 Description: The name of the nested endpoint.
-
-### <a name="output_priority"></a> [priority](#output\_priority)
-
-Description: The endpoint priority returned by Azure.
 
 ### <a name="output_resource_id"></a> [resource\_id](#output\_resource\_id)
 
