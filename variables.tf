@@ -227,6 +227,40 @@ DESCRIPTION
   nullable    = false
 }
 
+variable "ignore_body_changes" {
+  type = object({
+    network_trafficmanagerprofiles = optional(list(string), [])
+    authorization_locks            = optional(list(string), [])
+    authorization_role_assignments = optional(list(string), [])
+    insights_diagnostic_settings   = optional(list(string), [])
+    network_trafficmanagerprofiles_azure_endpoints = optional(object({
+      network_trafficmanagerprofiles_azure_endpoints = optional(list(string), [])
+    }), {})
+    network_trafficmanagerprofiles_external_endpoints = optional(object({
+      network_trafficmanagerprofiles_external_endpoints = optional(list(string), [])
+    }), {})
+    network_trafficmanagerprofiles_nested_endpoints = optional(object({
+      network_trafficmanagerprofiles_nested_endpoints = optional(list(string), [])
+    }), {})
+  })
+  default     = {}
+  description = <<DESCRIPTION
+Body-relative paths to ignore for each AzAPI resource. Paths use dot notation. Changes take effect only after apply, and ignored configuration is not sent to Azure until the path is removed.
+
+- `network_trafficmanagerprofiles` - Paths ignored on the Traffic Manager profile.
+- `authorization_locks` - Paths ignored on management locks.
+- `authorization_role_assignments` - Paths ignored on role assignments.
+- `insights_diagnostic_settings` - Paths ignored on diagnostic settings.
+- `network_trafficmanagerprofiles_azure_endpoints` - Paths passed to the Azure endpoint submodule.
+- `network_trafficmanagerprofiles_azure_endpoints.network_trafficmanagerprofiles_azure_endpoints` - Paths ignored on Azure endpoints.
+- `network_trafficmanagerprofiles_external_endpoints` - Paths passed to the external endpoint submodule.
+- `network_trafficmanagerprofiles_external_endpoints.network_trafficmanagerprofiles_external_endpoints` - Paths ignored on external endpoints.
+- `network_trafficmanagerprofiles_nested_endpoints` - Paths passed to the nested endpoint submodule.
+- `network_trafficmanagerprofiles_nested_endpoints.network_trafficmanagerprofiles_nested_endpoints` - Paths ignored on nested endpoints.
+DESCRIPTION
+  nullable    = false
+}
+
 variable "lock" {
   type = object({
     kind = string
@@ -306,6 +340,58 @@ variable "profile_status" {
   }
 }
 
+variable "resource_types" {
+  type = object({
+    network_trafficmanagerprofiles = optional(string, "Microsoft.Network/trafficmanagerprofiles@2024-04-01-preview")
+    authorization_locks            = optional(string, "Microsoft.Authorization/locks@2020-05-01")
+    authorization_role_assignments = optional(string, "Microsoft.Authorization/roleAssignments@2022-04-01")
+    insights_diagnostic_settings   = optional(string, "Microsoft.Insights/diagnosticSettings@2021-05-01-preview")
+    network_trafficmanagerprofiles_azure_endpoints = optional(object({
+      network_trafficmanagerprofiles_azure_endpoints = optional(string)
+    }), {})
+    network_trafficmanagerprofiles_external_endpoints = optional(object({
+      network_trafficmanagerprofiles_external_endpoints = optional(string)
+    }), {})
+    network_trafficmanagerprofiles_nested_endpoints = optional(object({
+      network_trafficmanagerprofiles_nested_endpoints = optional(string)
+    }), {})
+  })
+  default     = {}
+  description = <<DESCRIPTION
+AzAPI resource types and API versions used by this module. Override any key to target a different API version.
+
+- `network_trafficmanagerprofiles` - Type for the Traffic Manager profile resource.
+- `authorization_locks` - Type for management lock resources.
+- `authorization_role_assignments` - Type for role assignment resources.
+- `insights_diagnostic_settings` - Type for diagnostic setting resources.
+- `network_trafficmanagerprofiles_azure_endpoints` - Nested object cascaded to the Azure endpoint submodule.
+- `network_trafficmanagerprofiles_azure_endpoints.network_trafficmanagerprofiles_azure_endpoints` - Type for Azure endpoint resources.
+- `network_trafficmanagerprofiles_external_endpoints` - Nested object cascaded to the external endpoint submodule.
+- `network_trafficmanagerprofiles_external_endpoints.network_trafficmanagerprofiles_external_endpoints` - Type for external endpoint resources.
+- `network_trafficmanagerprofiles_nested_endpoints` - Nested object cascaded to the nested endpoint submodule.
+- `network_trafficmanagerprofiles_nested_endpoints.network_trafficmanagerprofiles_nested_endpoints` - Type for nested endpoint resources.
+DESCRIPTION
+  nullable    = false
+}
+
+variable "retry" {
+  type = object({
+    error_message_regex  = optional(list(string))
+    interval_seconds     = optional(number)
+    max_interval_seconds = optional(number)
+  })
+  default     = null
+  description = <<DESCRIPTION
+Retry configuration applied to every supported AzAPI resource declared by the module and its applicable submodules. Defaults to `null` (no custom retry).
+
+- `error_message_regex`  - (Optional) A list of regex patterns matching error messages that trigger a retry.
+- `interval_seconds`     - (Optional) Initial interval between retries in seconds.
+- `max_interval_seconds` - (Optional) Maximum interval between retries in seconds.
+
+See <https://registry.terraform.io/providers/Azure/azapi/latest/docs/resources/resource#retry> for full semantics.
+DESCRIPTION
+}
+
 variable "role_assignments" {
   type = map(object({
     role_definition_id_or_name             = string
@@ -337,6 +423,24 @@ variable "tags" {
   type        = map(string)
   default     = null
   description = "(Optional) Tags of the resource."
+}
+
+variable "timeouts" {
+  type = object({
+    create = optional(string)
+    read   = optional(string)
+    update = optional(string)
+    delete = optional(string)
+  })
+  default     = null
+  description = <<DESCRIPTION
+Default per-operation timeouts applied to every supported AzAPI resource declared by the module and its applicable submodules. Defaults to `null` (provider defaults). Each value is a Go duration string (e.g. `30m`, `1h`).
+
+- `create` - (Optional) Timeout for create operations.
+- `read`   - (Optional) Timeout for read operations.
+- `update` - (Optional) Timeout for update operations.
+- `delete` - (Optional) Timeout for delete operations.
+DESCRIPTION
 }
 
 variable "traffic_view_enrollment_status" {
