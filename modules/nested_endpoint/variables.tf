@@ -92,27 +92,6 @@ variable "priority" {
   }
 }
 
-variable "subnets" {
-  type = list(object({
-    first = string
-    last  = optional(string)
-    scope = optional(number)
-  }))
-  default     = []
-  description = "The list of subnets, IP addresses, and/or address ranges mapped to this endpoint when using the Subnet traffic routing method."
-}
-
-variable "weight" {
-  type        = number
-  default     = null
-  description = "The weight of this endpoint (1-1000) when using the Weighted traffic routing method."
-
-  validation {
-    condition     = var.weight == null || (var.weight >= 1 && var.weight <= 1000)
-    error_message = "Weight must be between 1 and 1000."
-  }
-}
-
 variable "resource_types" {
   type = object({
     network_trafficmanagerprofiles_nested_endpoints = optional(string, "Microsoft.Network/trafficmanagerprofiles/NestedEndpoints@2024-04-01-preview")
@@ -144,6 +123,16 @@ See <https://registry.terraform.io/providers/Azure/azapi/latest/docs/resources/r
 DESCRIPTION
 }
 
+variable "subnets" {
+  type = list(object({
+    first = string
+    last  = optional(string)
+    scope = optional(number)
+  }))
+  default     = []
+  description = "The list of subnets, IP addresses, and/or address ranges mapped to this endpoint when using the Subnet traffic routing method."
+}
+
 variable "timeouts" {
   type = object({
     create = optional(string)
@@ -160,4 +149,15 @@ Default per-operation timeouts applied to every supported AzAPI resource declare
 - `update` - (Optional) Timeout for update operations.
 - `delete` - (Optional) Timeout for delete operations.
 DESCRIPTION
+}
+
+variable "weight" {
+  type        = number
+  default     = null
+  description = "The weight of this endpoint (1-1000) when using the Weighted traffic routing method."
+
+  validation {
+    condition     = var.weight == null || (var.weight >= 1 && var.weight <= 1000)
+    error_message = "Weight must be between 1 and 1000."
+  }
 }
