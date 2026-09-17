@@ -20,6 +20,8 @@ provider "azapi" {}
 module "regions" {
   source  = "Azure/avm-utl-regions/azurerm"
   version = "0.9.3"
+
+  enable_telemetry = false
 }
 
 locals {
@@ -113,7 +115,7 @@ module "traffic_manager" {
       enabled            = true
     }
   }
-  enable_telemetry = var.enable_telemetry
+  enable_telemetry = false
   # External endpoint pointing to an external website
   external_endpoints = {
     "external" = {

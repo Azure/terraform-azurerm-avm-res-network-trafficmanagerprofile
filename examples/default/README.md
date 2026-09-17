@@ -27,6 +27,8 @@ provider "azapi" {}
 module "regions" {
   source  = "Azure/avm-utl-regions/azurerm"
   version = "0.9.3"
+
+  enable_telemetry = false
 }
 
 # This allows us to randomize the region for the resource group.
@@ -77,7 +79,7 @@ module "test" {
   name                   = module.naming.traffic_manager_profile.name_unique
   resource_group_name    = azapi_resource.resource_group.name
   traffic_routing_method = "Weighted"
-  enable_telemetry       = var.enable_telemetry
+  enable_telemetry       = false
 
   depends_on = [azapi_resource.resource_group]
 }
