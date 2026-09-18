@@ -1,0 +1,7 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/azure-verified-modules-tools/main/src/Avm.Authoring/Resources/Schemas/v1/avm-module-metadata.schema.json",
+  "moduleDisplayName": "External Endpoint Submodule",
+  "moduleDescription": "Deploys an external endpoint in a parent Traffic Manager profile, targeting a fully-qualified DNS name or IP address.",
+  "canonicalType": "Microsoft.Network/trafficmanagerprofiles/ExternalEndpoints",
+  "telemetryIdPrefix": "46d3xtrf.res.6630768"
+}
