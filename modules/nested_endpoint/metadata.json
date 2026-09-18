@@ -1,0 +1,7 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/azure-verified-modules-tools/main/src/Avm.Authoring/Resources/Schemas/v1/avm-module-metadata.schema.json",
+  "moduleDisplayName": "Nested Endpoint Submodule",
+  "moduleDescription": "Deploys a nested Traffic Manager endpoint targeting a child Traffic Manager profile, with a minimum number of available child endpoints.",
+  "canonicalType": "Microsoft.Network/trafficmanagerprofiles/NestedEndpoints",
+  "telemetryIdPrefix": "46d3xtrf.res.df79486"
+}
