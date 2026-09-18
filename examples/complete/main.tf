@@ -21,7 +21,7 @@ module "regions" {
   source  = "Azure/avm-utl-regions/azurerm"
   version = "0.9.3"
 
-  enable_telemetry = false
+  enable_telemetry = var.enable_telemetry
 }
 
 locals {
@@ -115,7 +115,7 @@ module "traffic_manager" {
       enabled            = true
     }
   }
-  enable_telemetry = false
+  enable_telemetry = var.enable_telemetry
   # External endpoint pointing to an external website
   external_endpoints = {
     "external" = {
