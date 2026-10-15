@@ -61,6 +61,7 @@ module "test" {
     relative_name = "avm-tm-${random_string.dns_suffix.result}"
     ttl           = 30
   }
+  location = var.location
   monitor_config = {
     protocol                     = "HTTPS"
     port                         = 443

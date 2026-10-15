@@ -68,6 +68,7 @@ module "test" {
     relative_name = "avm-tm-${random_string.dns_suffix.result}"
     ttl           = 30
   }
+  location = var.location
   monitor_config = {
     protocol                     = "HTTPS"
     port                         = 443
@@ -122,6 +123,14 @@ If it is set to false, then no telemetry will be collected.
 Type: `bool`
 
 Default: `true`
+
+### <a name="input_location"></a> [location](#input\_location)
+
+Description: The Azure region for this module's resources or telemetry deployment.
+
+Type: `string`
+
+Default: `"eastus"`
 
 ## Outputs
 
