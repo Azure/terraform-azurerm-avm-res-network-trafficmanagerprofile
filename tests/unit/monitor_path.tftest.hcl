@@ -1,8 +1,9 @@
 mock_provider "azapi" {
   mock_data "azapi_client_config" {
     defaults = {
-      subscription_id = "00000000-0000-0000-0000-000000000000"
-      tenant_id       = "00000000-0000-0000-0000-000000000001"
+      subscription_id          = "00000000-0000-0000-0000-000000000000"
+      tenant_id                = "00000000-0000-0000-0000-000000000001"
+      subscription_resource_id = "/subscriptions/00000000-0000-0000-0000-000000000000"
     }
   }
 
@@ -18,7 +19,7 @@ mock_provider "azapi" {
     }
   }
 }
-mock_provider "modtm" {}
+
 mock_provider "random" {}
 
 variables {
@@ -41,6 +42,7 @@ run "tcp_monitor_omits_path" {
       port     = 443
       path     = null
     }
+    location = "eastus"
   }
 
   assert {
@@ -62,6 +64,7 @@ run "http_monitor_defaults_path" {
       protocol = "HTTP"
       port     = 80
     }
+    location = "eastus"
   }
 
   assert {
@@ -79,6 +82,7 @@ run "https_monitor_preserves_path" {
       port     = 443
       path     = "/health"
     }
+    location = "eastus"
   }
 
   assert {

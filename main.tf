@@ -60,11 +60,13 @@ module "azure_endpoints" {
   source   = "./modules/azure_endpoint"
   for_each = var.azure_endpoints
 
+  location                   = var.location
   name                       = each.value.name
   target_resource_id         = each.value.target_resource_id
   traffic_manager_profile_id = azapi_resource.this.id
   always_serve               = each.value.always_serve
   custom_headers             = each.value.custom_headers
+  enable_telemetry           = var.enable_telemetry
   enabled                    = each.value.enabled
   endpoint_location          = each.value.endpoint_location
   geo_mapping                = each.value.geo_mapping
@@ -82,11 +84,13 @@ module "external_endpoints" {
   source   = "./modules/external_endpoint"
   for_each = var.external_endpoints
 
+  location                   = var.location
   name                       = each.value.name
   target                     = each.value.target
   traffic_manager_profile_id = azapi_resource.this.id
   always_serve               = each.value.always_serve
   custom_headers             = each.value.custom_headers
+  enable_telemetry           = var.enable_telemetry
   enabled                    = each.value.enabled
   endpoint_location          = each.value.endpoint_location
   geo_mapping                = each.value.geo_mapping
@@ -104,12 +108,14 @@ module "nested_endpoints" {
   source   = "./modules/nested_endpoint"
   for_each = var.nested_endpoints
 
+  location                   = var.location
   min_child_endpoints        = each.value.min_child_endpoints
   name                       = each.value.name
   target_resource_id         = each.value.target_resource_id
   traffic_manager_profile_id = azapi_resource.this.id
   always_serve               = each.value.always_serve
   custom_headers             = each.value.custom_headers
+  enable_telemetry           = var.enable_telemetry
   enabled                    = each.value.enabled
   endpoint_location          = each.value.endpoint_location
   geo_mapping                = each.value.geo_mapping

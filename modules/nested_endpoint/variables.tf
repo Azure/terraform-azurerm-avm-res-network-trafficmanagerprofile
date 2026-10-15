@@ -1,3 +1,9 @@
+variable "location" {
+  type        = string
+  description = "The Azure region for this module's resources or telemetry deployment."
+  nullable    = false
+}
+
 variable "min_child_endpoints" {
   type        = number
   description = "The minimum number of endpoints that must be available in the child profile in order for the parent profile to be considered available."
@@ -36,6 +42,17 @@ variable "custom_headers" {
   }))
   default     = []
   description = "List of custom headers."
+}
+
+variable "enable_telemetry" {
+  type        = bool
+  default     = true
+  description = <<DESCRIPTION
+This variable controls whether or not telemetry is enabled for the module.
+For more information see <https://aka.ms/avm/telemetryinfo>.
+If it is set to false, then no telemetry will be collected.
+DESCRIPTION
+  nullable    = false
 }
 
 variable "enabled" {
