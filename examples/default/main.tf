@@ -62,7 +62,6 @@ module "test" {
     relative_name = "avm-tm-${random_string.dns_suffix.result}"
     ttl           = 30
   }
-  location = var.location
   monitor_config = {
     protocol                     = "HTTPS"
     port                         = 443
@@ -75,6 +74,7 @@ module "test" {
   resource_group_name    = azapi_resource.resource_group.name
   traffic_routing_method = "Weighted"
   enable_telemetry       = var.enable_telemetry
+  location               = var.location
 
   depends_on = [azapi_resource.resource_group]
 }

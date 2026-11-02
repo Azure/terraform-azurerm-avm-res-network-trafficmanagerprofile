@@ -1,9 +1,3 @@
-variable "location" {
-  type        = string
-  description = "The Azure region for this module's resources or telemetry deployment."
-  nullable    = false
-}
-
 variable "name" {
   type        = string
   description = "The name of the Azure endpoint."
@@ -79,6 +73,17 @@ Body-relative paths to ignore for each AzAPI resource. Paths use dot notation. C
 - `network_trafficmanagerprofiles_azure_endpoints` - Paths ignored on the Azure endpoint.
 DESCRIPTION
   nullable    = false
+}
+
+variable "location" {
+  type        = string
+  default     = null
+  description = "The Azure region for this module's resources or telemetry deployment."
+
+  validation {
+    condition     = !var.enable_telemetry || var.location != null
+    error_message = "The location must not be null when telemetry is enabled."
+  }
 }
 
 variable "priority" {

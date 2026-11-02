@@ -49,12 +49,6 @@ object({
   })
 ```
 
-### <a name="input_location"></a> [location](#input\_location)
-
-Description: The Azure region for this module's resources or telemetry deployment.
-
-Type: `string`
-
 ### <a name="input_monitor_config"></a> [monitor\_config](#input\_monitor\_config)
 
 Description: The endpoint monitoring settings of the Traffic Manager profile.
@@ -278,6 +272,14 @@ object({
 ```
 
 Default: `{}`
+
+### <a name="input_location"></a> [location](#input\_location)
+
+Description: The Azure region for this module's resources or telemetry deployment.
+
+Type: `string`
+
+Default: `null`
 
 ### <a name="input_lock"></a> [lock](#input\_lock)
 
