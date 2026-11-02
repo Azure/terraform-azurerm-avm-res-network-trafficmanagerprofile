@@ -25,12 +25,6 @@ The following resources are used by this module:
 
 The following input variables are required:
 
-### <a name="input_location"></a> [location](#input\_location)
-
-Description: The Azure region for this module's resources or telemetry deployment.
-
-Type: `string`
-
 ### <a name="input_min_child_endpoints"></a> [min\_child\_endpoints](#input\_min\_child\_endpoints)
 
 Description: The minimum number of endpoints that must be available in the child profile in order for the parent profile to be considered available.
@@ -131,6 +125,14 @@ object({
 ```
 
 Default: `{}`
+
+### <a name="input_location"></a> [location](#input\_location)
+
+Description: The Azure region for this module's resources or telemetry deployment.
+
+Type: `string`
+
+Default: `null`
 
 ### <a name="input_min_child_endpoints_ipv4"></a> [min\_child\_endpoints\_ipv4](#input\_min\_child\_endpoints\_ipv4)
 

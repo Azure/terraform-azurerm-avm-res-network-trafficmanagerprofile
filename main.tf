@@ -60,7 +60,6 @@ module "azure_endpoints" {
   source   = "./modules/azure_endpoint"
   for_each = var.azure_endpoints
 
-  location                   = var.location
   name                       = each.value.name
   target_resource_id         = each.value.target_resource_id
   traffic_manager_profile_id = azapi_resource.this.id
@@ -71,6 +70,7 @@ module "azure_endpoints" {
   endpoint_location          = each.value.endpoint_location
   geo_mapping                = each.value.geo_mapping
   ignore_body_changes        = var.ignore_body_changes.network_trafficmanagerprofiles_azure_endpoints
+  location                   = var.location
   priority                   = each.value.priority
   resource_types             = var.resource_types.network_trafficmanagerprofiles_azure_endpoints
   retry                      = var.retry
@@ -84,7 +84,6 @@ module "external_endpoints" {
   source   = "./modules/external_endpoint"
   for_each = var.external_endpoints
 
-  location                   = var.location
   name                       = each.value.name
   target                     = each.value.target
   traffic_manager_profile_id = azapi_resource.this.id
@@ -95,6 +94,7 @@ module "external_endpoints" {
   endpoint_location          = each.value.endpoint_location
   geo_mapping                = each.value.geo_mapping
   ignore_body_changes        = var.ignore_body_changes.network_trafficmanagerprofiles_external_endpoints
+  location                   = var.location
   priority                   = each.value.priority
   resource_types             = var.resource_types.network_trafficmanagerprofiles_external_endpoints
   retry                      = var.retry
@@ -108,7 +108,6 @@ module "nested_endpoints" {
   source   = "./modules/nested_endpoint"
   for_each = var.nested_endpoints
 
-  location                   = var.location
   min_child_endpoints        = each.value.min_child_endpoints
   name                       = each.value.name
   target_resource_id         = each.value.target_resource_id
@@ -120,6 +119,7 @@ module "nested_endpoints" {
   endpoint_location          = each.value.endpoint_location
   geo_mapping                = each.value.geo_mapping
   ignore_body_changes        = var.ignore_body_changes.network_trafficmanagerprofiles_nested_endpoints
+  location                   = var.location
   min_child_endpoints_ipv4   = each.value.min_child_endpoints_ipv4
   min_child_endpoints_ipv6   = each.value.min_child_endpoints_ipv6
   priority                   = each.value.priority
