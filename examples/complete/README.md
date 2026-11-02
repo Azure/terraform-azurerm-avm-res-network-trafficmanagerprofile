@@ -97,7 +97,6 @@ module "traffic_manager" {
     relative_name = "avm-tm-complete-${random_string.dns_suffix.result}"
     ttl           = 30
   }
-  location = var.location
   monitor_config = {
     protocol                     = "HTTPS"
     port                         = 443
@@ -133,6 +132,7 @@ module "traffic_manager" {
       weight = 50
     }
   }
+  location       = var.location
   profile_status = "Enabled"
 
   depends_on = [azapi_resource.resource_group]

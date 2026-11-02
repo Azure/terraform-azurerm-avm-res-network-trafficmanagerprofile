@@ -16,12 +16,6 @@ DESCRIPTION
   }
 }
 
-variable "location" {
-  type        = string
-  description = "The Azure region for this module's resources or telemetry deployment."
-  nullable    = false
-}
-
 variable "monitor_config" {
   type = object({
     protocol                     = string
@@ -265,6 +259,17 @@ Body-relative paths to ignore for each AzAPI resource. Paths use dot notation. C
 - `network_trafficmanagerprofiles_nested_endpoints.network_trafficmanagerprofiles_nested_endpoints` - Paths ignored on nested endpoints.
 DESCRIPTION
   nullable    = false
+}
+
+variable "location" {
+  type        = string
+  default     = null
+  description = "The Azure region for this module's resources or telemetry deployment."
+
+  validation {
+    condition     = !var.enable_telemetry || var.location != null
+    error_message = "The location must not be null when telemetry is enabled."
+  }
 }
 
 variable "lock" {
