@@ -26,7 +26,7 @@ provider "azapi" {}
 # Filter to only regions that support availability zones for zone-redundant resources
 module "regions" {
   source  = "Azure/avm-utl-regions/azurerm"
-  version = "0.13.2"
+  version = "0.15.0"
 
   location         = var.location
   enable_telemetry = var.enable_telemetry
@@ -204,7 +204,7 @@ Version: 0.3.0
 
 Source: Azure/avm-utl-regions/azurerm
 
-Version: 0.13.2
+Version: 0.15.0
 
 ### <a name="module_traffic_manager"></a> [traffic\_manager](#module\_traffic\_manager)
 
